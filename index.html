@@ -73,6 +73,13 @@ section{scroll-margin-top:70px; margin-bottom:42px}
 .casebox{background:linear-gradient(180deg,#FFF8EC,#FBEFD9); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:10px; padding:11px 15px; margin-top:12px; font-size:13.5px; color:var(--ink2)}
 .casebox b{color:var(--accent)}
 .casebox .meta{color:var(--muted); font-size:12px; margin-top:3px}
+/* 參數教學框 */
+.parambox{background:#F3F1EA; border:1px solid var(--border2); border-left:4px solid var(--l2); border-radius:11px; padding:13px 16px; margin:12px 0; font-size:13.5px; color:var(--ink2)}
+.parambox h4{margin:0 0 8px; font-size:14px; color:var(--l2); font-weight:800}
+.parambox .pp{display:flex; gap:10px; margin:5px 0; align-items:baseline}
+.parambox .pp b:first-child{color:var(--ink); min-width:50px; flex-shrink:0; font-weight:800}
+.parambox .tradeoff{background:#FFFCF6; border:1px dashed var(--border); border-radius:8px; padding:9px 12px; margin-top:9px; font-size:13px; line-height:1.7}
+.parambox .watch{margin-top:9px; font-size:12.8px; color:var(--accent); line-height:1.6}
 .legend-note{font-size:12.5px; color:var(--muted); margin-top:8px; display:flex; flex-wrap:wrap; gap:14px}
 .legend-note span{display:inline-flex; align-items:center; gap:5px}
 .dot{width:10px;height:10px;border-radius:50%;display:inline-block}
@@ -93,7 +100,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
   section{margin-bottom:8px}
   .modhead{break-after:avoid} h2,h3{break-after:avoid}
   .card{box-shadow:none; border-color:#ddd; padding:14px 16px; margin-bottom:14px; break-inside:avoid}
-  .chart,.formula,.kv,.casebox,.signal-table,.banner,.grid2,.card>.ch{break-inside:avoid}
+  .chart,.formula,.kv,.casebox,.parambox,.signal-table,.banner,.grid2,.card>.ch{break-inside:avoid}
 }
 @media(max-width:880px){.wrap{grid-template-columns:1fr} .toc{display:none}}
 </style>
@@ -237,6 +244,13 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
           <div class="grp"><label>長期 MA</label><input type="range" id="ma-long" min="20" max="120" value="60"><span class="val" id="ma-long-v">60</span><span class="hint">日</span></div>
           <div class="grp"><label><input type="checkbox" id="ma-ema"> 用 EMA</label></div>
         </div>
+        <div class="parambox">
+          <h4>🎛️ 這兩條均線的天數在調什麼？</h4>
+          <div class="pp"><b>短期</b><span>你關注的「近期平均成本」。5 日≈一週、20 日≈一個月、60 日≈一季，短均緊貼著價格跑。</span></div>
+          <div class="pp"><b>長期</b><span>趨勢的基準線，天數越長越穩、越能代表大方向。</span></div>
+          <div class="tradeoff">⚖️ <b>兩線差距大</b>（如 20/60）→ 黃金/死亡交叉<b>少而可靠</b>，抓大波段（上圖台積電一年才幾次）；<b>差距小</b>（如 5/20）→ 交叉<b>頻繁但雜訊多</b>，適合短線。<br>📐 <b>EMA vs SMA</b>：EMA 加重近期價格、轉折反應快但假訊號多；SMA 等權平均、慢半拍但平穩。</div>
+          <div class="watch">👀 把短期從 5 拉到 20：交叉次數明顯變少、每次訊號更「重」。經典組合：5/20（短）、20/60（中）、60/120（長）。</div>
+        </div>
         <div id="card-ma"><div id="c-ma" class="chart tall"></div></div>
         <div class="casebox" id="case-ma"></div>
         <div class="grid2" style="margin-top:10px">
@@ -262,6 +276,14 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
           <div class="grp"><label>慢線</label><input type="range" id="macd-s" min="20" max="40" value="26"><span class="val" id="macd-s-v">26</span></div>
           <div class="grp"><label>訊號</label><input type="range" id="macd-m" min="3" max="15" value="9"><span class="val" id="macd-m-v">9</span></div>
         </div>
+        <div class="parambox">
+          <h4>🎛️ 快線、慢線、訊號線——各管什麼？為什麼要調？</h4>
+          <div class="pp"><b>快線</b><span>反應快的 EMA（預設 12）。跑在前頭，代表「短期動能」。</span></div>
+          <div class="pp"><b>慢線</b><span>反應慢的 EMA（預設 26），代表「中期趨勢」基準。<b>DIF＝快線−慢線</b>，物理意義就是「短期偏離中期多少、偏哪邊」；DIF 由負翻正＝短期動能轉強。</span></div>
+          <div class="pp"><b>訊號線</b><span>把 DIF 再平滑一次（預設 9）當「觸發線」；DIF 上穿它＝買、下穿＝賣。柱狀體＝DIF 與訊號線的差，是兩者「快要交叉」的預告。</span></div>
+          <div class="tradeoff">⚖️ <b>三個都調小</b>（如 6/13/4）→ 更靈敏、更早給訊號，但<b>假訊號明顯變多</b>，短線當沖用；<b>調大</b>（如 19/39/9）→ 訊號少而穩、過濾雜訊，波段投資用。其中<b>訊號線單獨調小</b>＝交叉更頻繁敏感、調大＝交叉更少更可靠。</div>
+          <div class="watch">👀 把快線從 12 拉到接近慢線（如 22）：柱狀體幾乎貼著零軸、訊號變稀；反向拉開則柱狀體大起大落。預設 12/26/9 是 Gerald Appel 1970 年代用「半月／一月／一週半」的交易日推算，現為全球通用標準。</div>
+        </div>
         <div id="card-macd"><div id="c-macd" class="chart tall"></div></div>
         <div class="casebox" id="case-macd"></div>
       </div>
@@ -272,6 +294,12 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
         <p class="sub">把一段期間的漲幅占比換算成 0–100。70 以上超買、30 以下超賣。</p>
         <div class="formula">RSI = 100 − 100 / (1 + 平均漲幅 / 平均跌幅)</div>
         <div class="controls"><div class="grp"><label>週期</label><input type="range" id="rsi-p" min="5" max="30" value="14"><span class="val" id="rsi-p-v">14</span><span class="hint">日</span></div></div>
+        <div class="parambox">
+          <h4>🎛️ 週期調大調小差在哪？</h4>
+          <div class="pp"><b>週期</b><span>計算「平均漲幅 ÷ 平均跌幅」時往回看幾天。14 是發明人 Wilder 的原始設定。</span></div>
+          <div class="tradeoff">⚖️ <b>調小</b>（如 6~9）→ RSI 上下擺動更劇烈、更頻繁觸及 70/30，短線抓轉折用但假訊號多；<b>調大</b>（如 21~30）→ 曲線平滑、超買超賣訊號少而可靠，過濾雜訊看中期。</div>
+          <div class="watch">👀 把週期從 14 改成 6：RSI 變得忽上忽下、常衝破 70 或跌破 30——靈敏但容易「狼來了」。</div>
+        </div>
         <div id="card-rsi"><div id="c-rsi" class="chart tall"></div></div>
         <div class="casebox" id="case-rsi"></div>
         <div class="kv warn" style="margin-top:8px"><h4>強勢股的鈍化陷阱</h4><p>多頭噴出時 RSI 可長期黏在 70 以上（鈍化），此時「超買就賣」會太早下車。背離（價新高、RSI 不創高）比絕對數值更可靠。</p></div>
@@ -284,6 +312,12 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
         <div class="formula">RSV = (收盤 − N日最低) / (N日最高 − N日最低) × 100
 K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <div class="controls"><div class="grp"><label>RSV 週期</label><input type="range" id="kd-p" min="5" max="21" value="9"><span class="val" id="kd-p-v">9</span><span class="hint">日</span></div></div>
+        <div class="parambox">
+          <h4>🎛️ RSV 週期在調什麼？</h4>
+          <div class="pp"><b>週期</b><span>計算「收盤價落在近 N 日高低區間的哪個位置」時往回看幾天。台股慣用 9 日。</span></div>
+          <div class="tradeoff">⚖️ <b>調小</b>→ KD 更敏感、頻繁進出超買超賣區，短線訊號多；<b>調大</b>→ 曲線平滑、訊號少但較不會被洗。KD 本身已比 MACD 靈敏，週期過小容易過度交易。</div>
+          <div class="watch">👀 看 K（快）與 D（慢）兩線：低檔（&lt;20）K 上穿 D 是買訊、高檔（&gt;80）下穿是賣訊；強勢股會在 80 以上「鈍化」連續鈍走，別一交叉就摸頂。</div>
+        </div>
         <div id="card-kd"><div id="c-kd" class="chart tall"></div></div>
         <div class="casebox" id="case-kd"></div>
       </div>
@@ -292,6 +326,12 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <div class="ch"><h3>威廉指標 Williams %R<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-wr">⬇ 存圖</button></div>
         <p class="sub">與 KD 同源、方向相反，刻度 0 ~ −100。−20 以上超買、−80 以下超賣，反應靈敏適合短線。資料：台積電近一年半。</p>
         <div class="controls"><div class="grp"><label>週期</label><input type="range" id="wr-p" min="5" max="28" value="14"><span class="val" id="wr-p-v">14</span><span class="hint">日</span></div></div>
+        <div class="parambox">
+          <h4>🎛️ 週期與看法</h4>
+          <div class="pp"><b>週期</b><span>與 KD 同源，往回看 N 日的高低區間。刻度是 0 ~ −100（注意是負值）。</span></div>
+          <div class="tradeoff">⚖️ <b>調小</b>→ 極靈敏、頻繁觸及 −20/−80，超短線用；<b>調大</b>→ 較平穩。−20 以上超買、−80 以下超賣。</div>
+          <div class="watch">👀 %R 反應比 KD 更快，常用來抓「最後一根」轉折，但也最容易假訊號，務必配合趨勢與量能一起看。</div>
+        </div>
         <div id="card-wr"><div id="c-wr" class="chart"></div></div>
       </div>
     </section>
@@ -310,6 +350,13 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
           <div class="grp"><label>週期 N</label><input type="range" id="boll-p" min="10" max="40" value="20"><span class="val" id="boll-p-v">20</span></div>
           <div class="grp"><label>倍數 K</label><input type="range" id="boll-k" min="10" max="30" value="20"><span class="val" id="boll-k-v">2.0</span><span class="hint">σ</span></div>
         </div>
+        <div class="parambox">
+          <h4>🎛️ 週期 N 與倍數 K——通道的兩個旋鈕</h4>
+          <div class="pp"><b>週期 N</b><span>中軌均線的天數，也是算標準差的樣本長度。20 是發明人 John Bollinger 的原始設定；N 越大通道越穩、反應越慢。</span></div>
+          <div class="pp"><b>倍數 K</b><span>通道寬度＝中軌 ± K 倍標準差。K=2 在常態假設下涵蓋約 95% 的價格波動——所以「碰到軌」本身就代表偏離常態。</span></div>
+          <div class="tradeoff">⚖️ <b>K 調小</b>（1~1.5）→ 通道變窄、價格<b>常常觸軌</b>、訊號多但雜；<b>K 調大</b>（2.5~3）→ 通道變寬、只有<b>極端行情</b>才觸軌、訊號少但可靠。</div>
+          <div class="watch">👀 把 K 從 2 調到 1：上下軌往中間收、K 棒頻繁穿出軌外。重點看「縮口」（通道變窄）→ 常是大行情前的醞釀，但方向要靠突破確認。</div>
+        </div>
         <div id="card-boll"><div id="c-boll" class="chart tall"></div></div>
         <div class="casebox" id="case-boll"></div>
         <div class="grid2" style="margin-top:8px">
@@ -322,6 +369,12 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <div class="ch"><h3>乖離率 BIAS<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-bias">⬇ 存圖</button></div>
         <p class="sub">(收盤 − 均線) ÷ 均線 ×100%。正乖離過大＝短線漲多易回；負乖離過大＝跌深易反彈。資料：NVIDIA。</p>
         <div class="controls"><div class="grp"><label>均線週期</label><input type="range" id="bias-p" min="5" max="60" value="20"><span class="val" id="bias-p-v">20</span><span class="hint">日</span></div></div>
+        <div class="parambox">
+          <h4>🎛️ 均線週期在調什麼？</h4>
+          <div class="pp"><b>週期</b><span>乖離率＝價格偏離「這條均線」多少 %。週期決定你拿來比的是哪條均線。</span></div>
+          <div class="tradeoff">⚖️ <b>短週期</b>（如 6~10）→ BIAS 波動大，抓<b>短線過熱/超跌</b>的反彈；<b>長週期</b>（如 60）→ 反映<b>中期</b>偏離，正乖離過大代表波段漲多。</div>
+          <div class="watch">👀 沒有絕對的「多少算過大」——每檔股票習性不同，要看它自己歷史上正/負乖離的常見極值落在哪。</div>
+        </div>
         <div id="card-bias"><div id="c-bias" class="chart"></div></div>
       </div>
     </section>
