@@ -137,19 +137,20 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
 <div class="wrap">
   <nav class="toc" id="toc">
     <div class="grp">基礎</div>
-    <a href="#m0">0 · K 線與顏色習慣</a>
-    <a href="#m1">1 · 趨勢與支撐壓力</a>
+    <a href="#m0">0 · K 線基礎 + 型態大全</a>
+    <a href="#m1">1 · 趨勢/支撐壓力/費波那契</a>
     <div class="grp">型態學</div>
     <a href="#m2">2 · 反轉與整理型態</a>
     <div class="grp">指標</div>
-    <a href="#m3">3 · 均線系統 MA/EMA</a>
-    <a href="#m4">4 · 動能 MACD/RSI/KD</a>
+    <a href="#m3">3 · 均線系統 + 葛蘭碧</a>
+    <a href="#m4">4 · 動能 + DMI/SAR/背離</a>
     <a href="#m5">5 · 通道與乖離 BOLL/BIAS</a>
     <a href="#m6">6 · 量能 Volume/OBV</a>
     <div class="grp">籌碼面（台股）</div>
     <a href="#m7">7 · 法人 · 融資券 · 外資</a>
     <div class="grp">實戰</div>
     <a href="#m8">8 · 多指標綜合看盤</a>
+    <a href="#m9">9 · 實戰整合 SOP</a>
   </nav>
 
   <main>
@@ -224,6 +225,14 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
           <div class="kv"><h4>趨勢三型</h4><ul><li><b>上升</b>：高點越來越高、低點越來越高</li><li><b>下降</b>：高低點皆越來越低</li><li><b>盤整</b>：在支撐壓力間來回</li></ul></div>
           <div class="kv"><h4>角色互換</h4><p>壓力一旦帶量突破，往往變成新的支撐（反之亦然）。這是「頸線」「箱型突破」的理論基礎。</p></div>
         </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>費波那契回檔 Fibonacci<span class="tag">真實</span></h3><button class="btn" data-shot="card-fib">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>股票漲一波後總會「回檔休息」，但會回多深？費波那契用幾個神奇比例（<b>38.2%、50%、61.8%</b>）標出「常見的休息深度」，像爬山到一半的幾個固定休息站。<b>回檔到這些線附近常有支撐</b>，是找買點的參考。</div>
+        <p class="sub">取此波段的真實最高與最低，畫出回檔比例線。<b>0%＝高點、100%＝低點</b>；38.2/50/61.8% 是最受關注的支撐帶（強勢回 38.2% 就止跌，弱勢可能回到 61.8%）。</p>
+        <div id="card-fib"><div id="c-fib" class="chart tall"></div></div>
+        <div class="kv warn" style="margin-top:8px"><h4>限制</h4><p>費波那契是「自我實現」的心理價位，非物理定律；必須<b>先有明確波段</b>才畫得出，盤整時無意義。常與均線/前高低點重疊處才是強支撐。</p></div>
       </div>
     </section>
 
@@ -309,6 +318,17 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
           <div class="kv warn"><h4>盤整時的陷阱</h4><p>橫盤時均線糾結、交叉訊號「上沖下洗」連續假訊號。均線是<b>落後指標</b>，趨勢盤好用、盤整盤失靈。</p></div>
         </div>
       </div>
+
+      <div class="card">
+        <div class="ch"><h3>葛蘭碧八大法則</h3><button class="btn" data-shot="card-granville">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>Joseph Granville 把「<b>價格與均線的距離與穿越</b>」歸納成 8 種買賣時機。核心直覺：均線是「平均成本」，<b>價格站上均線＝開始賺錢（偏多）、跌破＝開始套牢（偏空）</b>；而價格<b>離均線太遠</b>就像橡皮筋拉太開，會被拉回。</div>
+        <p class="sub">圖中標出代表性買賣點：4 個買點（站上、回測不破、跌破又拉回、跌深遠離後反彈）與 4 個賣點對稱。</p>
+        <div id="card-granville"><div id="c-granville" class="chart"></div></div>
+        <div class="grid2" style="margin-top:8px">
+          <div class="kv"><h4>四個買點</h4><ul><li>① 均線翻揚、價站上</li><li>② 回測均線不破</li><li>③ 跌破均線後又拉回站上</li><li>④ 價遠離均線下方後的反彈（搶反彈）</li></ul></div>
+          <div class="kv warn"><h4>四個賣點（對稱）</h4><ul><li>⑤ 均線走平翻落、價跌破</li><li>⑥ 反彈均線不過</li><li>⑦ 假突破後又跌破</li><li>⑧ 正乖離過大（漲太多遠離均線）</li></ul></div>
+        </div>
+      </div>
     </section>
 
     <!-- ===== M4 ===== -->
@@ -388,6 +408,37 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
           <div class="watch">👀 %R 反應比 KD 更快，常用來抓「最後一根」轉折，但也最容易假訊號，務必配合趨勢與量能一起看。</div>
         </div>
         <div id="card-wr"><div id="c-wr" class="chart"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>DMI / ADX 趨勢強度<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-dmi">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>前面指標多在問「漲還是跌」，DMI 在問「<b>到底有沒有明確趨勢、夠不夠強</b>」。+DI＝漲的力道、−DI＝跌的力道，誰在上面偏誰；<b>ADX 是「趨勢強度計」</b>——ADX 越高＝趨勢越明確（不管漲跌），ADX 很低＝盤整沒方向。</div>
+        <p class="sub">下方：<b>+DI</b>（多方力道）、<b>−DI</b>（空方力道）、<b>ADX</b>（趨勢強度）。+DI 上穿 −DI＝偏多；ADX > 25（虛線）才代表「有像樣的趨勢」、值得順勢。</p>
+        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="dmi-p" min="5" max="40" value="14"><span class="val" id="dmi-p-v">14</span><span class="hint">日</span></div></div>
+        <div id="card-dmi"><div id="c-dmi" class="chart tall"></div></div>
+        <div class="grid2" style="margin-top:8px">
+          <div class="kv"><h4>怎麼用</h4><ul><li>ADX &lt; 20：盤整，改用 KD/RSI 震盪指標</li><li>ADX 上升且 &gt; 25：趨勢成形，順勢、用均線</li><li>+DI / −DI 交叉：方向轉換訊號</li></ul></div>
+          <div class="kv warn"><h4>注意</h4><p>ADX <b>只表示「強度」不表示「方向」</b>——ADX 高可能強漲也可能強跌，方向看 +DI/−DI 誰在上。ADX 反應較慢。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>SAR 拋物線（移動停損點）<span class="tag">真實</span></h3><button class="btn" data-shot="card-sar">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>SAR 是一串<b>跟在股價後面的點</b>：上漲時點在價格<b>下方</b>（像會自己往上爬的安全網／停損線）；一旦股價跌破，點就翻到<b>上方</b>＝趨勢可能反轉、該出場。最大用途是<b>幫你設「會自動上移的停損點」鎖住獲利</b>。</div>
+        <p class="sub">點在 K 棒<b>下方</b>＝多頭續抱；翻到<b>上方</b>＝轉空訊號。SAR 隨趨勢加速靠近價格。</p>
+        <div id="card-sar"><div id="c-sar" class="chart tall"></div></div>
+        <div class="kv warn" style="margin-top:8px"><h4>限制</h4><p>SAR 是<b>純趨勢工具</b>，<b>盤整時會頻繁翻面（被巴來巴去）</b>，只適合明確趨勢。常搭 ADX：ADX 高時用 SAR 才可靠。</p></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>背離 Divergence（動能指標的最強訊號）</h3><button class="btn" data-shot="card-diverge">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>背離＝<b>「價格」和「指標」走反方向</b>。比喻：車子還在往前衝（股價創新高），引擎聲卻越來越小（指標沒創新高）＝<b>動力在衰竭、快沒油了</b>，可能要停或倒退。這是 RSI/MACD/KD 最有價值的用法。</div>
+        <div id="card-diverge"><div id="svg-diverge" style="display:flex;justify-content:center;padding:4px 0"></div></div>
+        <div class="grid2" style="margin-top:8px">
+          <div class="kv warn"><h4>頂背離（偏空）</h4><p>股價<b>創新高</b>、但指標<b>沒創新高</b>（一頂比一頂低）＝上漲動能衰竭，漲勢可能到頂。</p></div>
+          <div class="kv"><h4>底背離（偏多）</h4><p>股價<b>創新低</b>、但指標<b>沒創新低</b>（一底比一底高）＝下跌動能衰竭，跌勢可能止穩。</p></div>
+        </div>
+        <p class="sub" style="margin-top:8px"><b>判讀步驟</b>：① 找價格兩個明顯高（低）點 → ② 對照同期指標對應點 → ③ 價創高但指標走低＝頂背離 → ④ <b>等價格實際轉弱（跌破前低/長黑）再動作</b>。背離常持續很久，是「警訊」不是「立即賣出鈕」，強勢股可能背離多次才真反轉。</p>
       </div>
     </section>
 
@@ -525,6 +576,55 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         </div>
       </div>
     </section>
+
+    <!-- ===== M9 實戰 SOP ===== -->
+    <section id="m9">
+      <div class="modhead"><span class="no">9</span><h2>實戰整合 SOP</h2></div>
+      <p class="lede">指標學完，真功夫是「<b>怎麼組合、何時出手、何時收手</b>」。技術分析不是預測未來，而是<b>管理機率與風險</b>——以下把前面所有工具串成可操作的流程。</p>
+
+      <div class="card">
+        <div class="ch"><h3>① 多指標共振檢查清單（進場前）</h3><button class="btn" data-shot="card-sop1">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>別只看一個指標就進場。像看病要「症狀＋檢驗＋影像」多項一致才確診，進場前也要<b>幾個面向同時點頭（共振）</b>勝率才高。下面四面向越多打勾越好。</div>
+        <div id="card-sop1"><div class="grid2">
+          <div class="kv"><h4>📈 趨勢面（方向對嗎）</h4><ul><li>價站上 20MA、均線多頭排列</li><li>ADX &gt; 25（趨勢夠強）</li><li>順大盤方向、別逆勢</li></ul></div>
+          <div class="kv"><h4>⚡ 動能面（力道夠嗎）</h4><ul><li>MACD 柱翻紅／黃金交叉</li><li>KD 低檔黃金交叉、RSI 未過熱</li><li>無頂背離警訊</li></ul></div>
+          <div class="kv"><h4>📊 量能面（有人氣嗎）</h4><ul><li>突破帶量（價漲量增）</li><li>OBV 同步走高</li></ul></div>
+          <div class="kv"><h4>🏦 籌碼面（誰在買·台股）</h4><ul><li>外資／投信連續買超</li><li>融資未過熱、籌碼安定</li></ul></div>
+        </div></div>
+        <p class="sub" style="margin-top:8px"><b>原則</b>：四面向越多同向＝勝率越高；<b>互相矛盾時寧可放棄</b>（如價漲但量縮＋頂背離 → 別追）。</p>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>② 進出場與停損紀律</h3><button class="btn" data-shot="card-sop2">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>會買只是徒弟，會賣才是師傅。<b>進場前就先想好「錯了在哪出場」</b>——停損不是認輸，是保住本金的保險。新手最大虧損來自「凹單」（套牢不肯停損）。</div>
+        <div id="card-sop2"><div class="grid2">
+          <div class="kv"><h4>進場（擇一明確訊號）</h4><ul><li>帶量突破壓力／頸線</li><li>回測支撐（均線/前低/Fib）不破</li><li>多指標共振成立</li></ul></div>
+          <div class="kv warn"><h4>停損（進場同時就設）</h4><ul><li>跌破進場依據的支撐</li><li>跌破 SAR 點／重要均線</li><li>單筆虧損上限（如 −7~8%）</li></ul></div>
+          <div class="kv"><h4>停利／續抱</h4><ul><li>用 SAR／移動均線「讓利潤奔跑」</li><li>觸壓力＋過熱（RSI/KD 高）＋頂背離 → 分批出</li></ul></div>
+          <div class="kv warn"><h4>鐵律</h4><ul><li><b>停損絕不往下移</b>（凹單是大忌）</li><li>停利可往上移、不可往下</li><li>控制部位大小、別押身家</li></ul></div>
+        </div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>③ 選股 → 進場流程（由上而下）</h3><button class="btn" data-shot="card-sop3">⬇ 存圖</button></div>
+        <div id="card-sop3"><div class="kv"><ul style="margin:0">
+          <li><b>第 1 步 看大盤</b>：大盤多頭再做多（順風）；空頭就減碼、別硬做多</li>
+          <li><b>第 2 步 選強勢族群</b>：找近期領漲的產業（資金聚集處）</li>
+          <li><b>第 3 步 族群內挑強勢股</b>：均線多頭排列、創波段新高、帶量、法人買超</li>
+          <li><b>第 4 步 等進場點</b>：不追高，等「回測不破」或「帶量突破」的明確訊號</li>
+          <li><b>第 5 步 設好停損才下單</b>：先算「錯了賠多少」能接受才進場</li>
+        </ul></div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>④ 新手常見錯誤（避開就贏一半）</h3><button class="btn" data-shot="card-sop4">⬇ 存圖</button></div>
+        <div id="card-sop4"><div class="grid2">
+          <div class="kv warn"><h4>技術面錯誤</h4><ul><li>只看一個指標就進場（不共振）</li><li>盤整盤硬用趨勢指標／趨勢盤硬抓超買超賣</li><li>看到超買就賣（強勢股會鈍化續漲）</li><li>把「背離」當立即賣出鈕（可能持續很久）</li></ul></div>
+          <div class="kv warn"><h4>心態錯誤</h4><ul><li>凹單：套牢不停損、越攤越平</li><li>追高殺低：FOMO 追在最高點</li><li>賺小賠大：賺一點就跑、賠了死抱</li><li>重押／借錢 all in：一次看錯就出局</li></ul></div>
+        </div></div>
+        <p class="sub" style="margin-top:8px">技術分析是<b>機率與紀律的遊戲</b>，不是水晶球。長期贏家靠的是「<b>嚴設停損＋讓利潤奔跑＋控制部位</b>」，而非每次都猜對。</p>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -542,7 +642,7 @@ function applyMode(m){MODE=m;const t=THEME[m];
   document.documentElement.style.setProperty('--down',t.down);
   document.getElementById('mode-label').textContent=t.label;
   document.querySelectorAll('#mkt-seg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
-  renderAll(); drawAnatomy(); drawPatterns();}
+  renderAll(); drawAnatomy(); drawPatterns(); drawDiverge();}
 function C(){const cs=getComputedStyle(document.documentElement);return{
   up:THEME[MODE].up,down:THEME[MODE].down,
   grid:cs.getPropertyValue('--grid').trim(),axis:cs.getPropertyValue('--axis').trim(),
@@ -561,6 +661,29 @@ function BOLL(close,p,mult){const mid=SMA(close,p);const up=[],low=[];for(let i=
 function BIAS(close,p){const ma=SMA(close,p);return close.map((v,i)=>ma[i]==null?null:(v-ma[i])/ma[i]*100);}
 function WR(high,low,close,p){const o=new Array(close.length).fill(null);for(let i=p-1;i<close.length;i++){let hh=-1e18,ll=1e18;for(let j=0;j<p;j++){hh=Math.max(hh,high[i-j]);ll=Math.min(ll,low[i-j]);}o[i]=hh===ll?0:(hh-close[i])/(hh-ll)*-100;}return o;}
 function OBV(close,vol){const o=[0];for(let i=1;i<close.length;i++){o.push(o[i-1]+(close[i]>close[i-1]?vol[i]:close[i]<close[i-1]?-vol[i]:0));}return o;}
+function DMI(high,low,close,p){const n=close.length,tr=Array(n).fill(0),pdm=Array(n).fill(0),mdm=Array(n).fill(0);
+  for(let i=1;i<n;i++){const up=high[i]-high[i-1],dn=low[i-1]-low[i];
+    pdm[i]=(up>dn&&up>0)?up:0; mdm[i]=(dn>up&&dn>0)?dn:0;
+    tr[i]=Math.max(high[i]-low[i],Math.abs(high[i]-close[i-1]),Math.abs(low[i]-close[i-1]));}
+  const wil=a=>{const o=Array(n).fill(null);let s=0;for(let i=1;i<=p&&i<n;i++)s+=a[i];o[p]=s;
+    for(let i=p+1;i<n;i++){s=s-s/p+a[i];o[i]=s;}return o;};
+  const trS=wil(tr),pdmS=wil(pdm),mdmS=wil(mdm),pdi=Array(n).fill(null),mdi=Array(n).fill(null),dx=Array(n).fill(null);
+  for(let i=p;i<n;i++){if(trS[i]){pdi[i]=100*pdmS[i]/trS[i];mdi[i]=100*mdmS[i]/trS[i];const sm=pdi[i]+mdi[i];dx[i]=sm?100*Math.abs(pdi[i]-mdi[i])/sm:0;}}
+  const adx=Array(n).fill(null),f=p*2-1;let sd=0;
+  for(let i=p;i<=f&&i<n;i++)sd+=(dx[i]||0);
+  if(f<n){adx[f]=sd/p;for(let i=f+1;i<n;i++)adx[i]=(adx[i-1]*(p-1)+(dx[i]||0))/p;}
+  return{pdi,mdi,adx};}
+function SAR(high,low,af0=0.02,step=0.02,afMax=0.2){const n=high.length,sar=Array(n).fill(null);
+  if(n<2)return sar; let trend=1,af=af0,ep=high[0],s=low[0]; sar[0]=s;
+  for(let i=1;i<n;i++){s=s+af*(ep-s);
+    if(trend>0){s=Math.min(s,low[i-1],i>=2?low[i-2]:low[i-1]);
+      if(high[i]>ep){ep=high[i];af=Math.min(af+step,afMax);}
+      if(low[i]<s){trend=-1;s=ep;ep=low[i];af=af0;}}
+    else{s=Math.max(s,high[i-1],i>=2?high[i-2]:high[i-1]);
+      if(low[i]<ep){ep=low[i];af=Math.min(af+step,afMax);}
+      if(high[i]>s){trend=1;s=ep;ep=high[i];af=af0;}}
+    sar[i]=s;}
+  return sar;}
 
 /* ===== 3. 真實資料存取 ===== */
 const SR=window.CASES.series;
@@ -663,6 +786,23 @@ const PATTERNS={
 function drawPatterns(){
   for(const g of ['bottom','top','neutral']){const el=document.getElementById('pt-'+g);if(!el)continue;
     el.innerHTML=PATTERNS[g].map(p=>`<div class="pttile">${candleSVG(p.k,140,84)}<div class="pn">${p.name}</div><div class="pd">${p.d}</div><div class="pr">${'★'.repeat(p.r)}</div></div>`).join('');}}
+function drawDiverge(){const t=THEME[MODE],IND='#9B59B6';const el=document.getElementById('svg-diverge');if(!el)return;
+  el.innerHTML=`<svg width="460" height="216" viewBox="0 0 460 216" font-family="inherit" font-size="11">
+   <text x="8" y="14" fill="#6e6557" font-weight="700">價格：高點越來越高 ↑</text>
+   <polyline points="20,72 70,42 120,64 185,22 240,50" fill="none" stroke="${t.up}" stroke-width="2.5"/>
+   <circle cx="70" cy="42" r="3.5" fill="${t.up}"/><circle cx="185" cy="22" r="3.5" fill="${t.up}"/>
+   <line x1="70" y1="42" x2="185" y2="22" stroke="${t.up}" stroke-dasharray="5" stroke-width="1.5"/>
+   <text x="250" y="34" fill="${t.up}" font-weight="800">頂↑↑</text>
+   <line x1="20" y1="108" x2="300" y2="108" stroke="#e6ddcf"/>
+   <text x="8" y="132" fill="#6e6557" font-weight="700">指標(RSI/MACD)：高點卻越來越低 ↓</text>
+   <polyline points="20,196 70,150 120,170 185,162 240,194" fill="none" stroke="${IND}" stroke-width="2.5"/>
+   <circle cx="70" cy="150" r="3.5" fill="${IND}"/><circle cx="185" cy="162" r="3.5" fill="${IND}"/>
+   <line x1="70" y1="150" x2="185" y2="162" stroke="${t.down}" stroke-dasharray="5" stroke-width="1.5"/>
+   <text x="250" y="160" fill="${t.down}" font-weight="800">頂↓ 背離！</text>
+   <text x="320" y="110" fill="#b5673b" font-weight="800">頂背離</text>
+   <text x="320" y="128" fill="#8a7f76">價創高、</text><text x="320" y="144" fill="#8a7f76">動能卻衰竭</text>
+   <text x="320" y="166" fill="#8a7f76">→ 漲勢可能</text><text x="320" y="182" fill="#8a7f76">　 到頂</text>
+  </svg>`;}
 
 /* M0 真實 K 線：台積電近一年 */
 reg('c-candles',function(){const c=C();const d=dsWindow('2330','2025-06-19','2026-06-18');
@@ -912,8 +1052,59 @@ function setChipCases(){const ch=CASES.chips['2330'];
   document.getElementById('case-foreign').innerHTML='📌 <b>真實案例</b>　外資持股比率自 <b>'+fr[0]+'%</b> 變動至 <b>'+fr[fr.length-1]+'%</b>；對照同期股價大漲，外資雖獲利調節、持股仍維持高檔，國際資金並未撤離。';
 }
 
+/* M4 DMI/ADX（真實·互動）*/
+reg('c-dmi',function(){const c=C();const d=dsWindow('2330','2024-01-01','2026-06-18');const p=+v('dmi-p');document.getElementById('dmi-p-v').textContent=p;
+  const {pdi,mdi,adx}=DMI(d.high,d.low,d.close,p);
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:['台積電','+DI','-DI','ADX'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:50,right:18,top:28,height:'50%'},{left:50,right:18,top:'70%',height:'20%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,scale:true,splitLine:{show:false}})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
+   series:[Object.assign(candleSeries('台積電',d.kdata,c),{name:'台積電'}),
+     Object.assign(line('+DI',pdi,c.up,1.5),{xAxisIndex:1,yAxisIndex:1}),
+     Object.assign(line('-DI',mdi,c.down,1.5),{xAxisIndex:1,yAxisIndex:1}),
+     Object.assign(line('ADX',adx,c.l3,2.2),{xAxisIndex:1,yAxisIndex:1,markLine:{symbol:'none',label:{color:c.axis,fontSize:10},data:[{yAxis:25,lineStyle:{color:c.axis,type:'dashed'}}]}})]};});
+
+/* M4 SAR 拋物線停損 */
+reg('c-sar',function(){const c=C();const d=dsWindow('2330','2025-01-01','2026-06-18');const sar=SAR(d.high,d.low);
+  const pts=sar.map((s,i)=>s==null?null:({value:[d.dates[i],s],itemStyle:{color:s<d.close[i]?c.up:c.down}})).filter(Boolean);
+  return{backgroundColor:'transparent',grid:{left:50,right:18,top:16,bottom:46},tooltip:tip(),
+   legend:{data:['台積電','SAR'],textStyle:{color:c.ink},top:0,right:10},
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:30,end:100}],
+   series:[candleSeries('台積電',d.kdata,c),{name:'SAR',type:'scatter',symbolSize:4,data:pts}]};});
+
+/* M1 費波那契回檔 */
+reg('c-fib',function(){const c=C();const d=dsWindow('2330','2024-08-01','2026-06-18');
+  const hi=Math.max(...d.high),lo=Math.min(...d.low),rng=hi-lo||1;
+  const levels=[0,0.236,0.382,0.5,0.618,0.786,1],cols=[c.down,c.l1,c.l2,c.l3,c.l4,c.l1,c.up];
+  const ml=levels.map((r,i)=>[{coord:[d.dates[0],hi-rng*r],lineStyle:{color:cols[i],type:'dashed',width:1.3},label:{color:c.ink,fontSize:10,formatter:(r*100).toFixed(1)+'%　'+(hi-rng*r).toFixed(0),position:'end'}},{coord:[d.dates[d.dates.length-1],hi-rng*r]}]);
+  return{backgroundColor:'transparent',grid:{left:54,right:74,top:16,bottom:46},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[Object.assign(candleSeries('台積電',d.kdata,c),{markLine:{symbol:'none',data:ml}})]};});
+
+/* M3 葛蘭碧八大法則（示意）*/
+reg('c-granville',function(){const c=C();
+  const closes=[100,99,98,97,99,103,106,104,101,103,107,111,113,109,105,103,106,110,114,111,107,109];
+  const kd=synthOHLC(closes,88),dts=synthLabels(closes.length),ma=SMA(closes,6);
+  const pill=(col,pos)=>({position:pos,distance:6,color:'#fff',fontSize:10,fontWeight:800,backgroundColor:col,padding:[2,6],borderRadius:5});
+  return{backgroundColor:'transparent',grid:{left:46,right:18,top:24,bottom:24},tooltip:tip(),
+   legend:{data:['K','MA6'],textStyle:{color:c.ink},top:0,right:10},
+   xAxis:{type:'category',data:dts,axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false}},
+   yAxis:yAxis(c),
+   series:[Object.assign(candleSeries('K',kd,c),{markPoint:{symbol:'circle',symbolSize:8,data:[
+     {coord:[dts[4],96],value:'買①站上均線',itemStyle:{color:c.up},label:pill(c.up,'bottom')},
+     {coord:[dts[8],100],value:'買②回測不破',itemStyle:{color:c.up},label:pill(c.up,'bottom')},
+     {coord:[dts[15],102],value:'買③跌破拉回',itemStyle:{color:c.up},label:pill(c.up,'bottom')},
+     {coord:[dts[12],115],value:'賣①正乖離過大',itemStyle:{color:c.down},label:pill(c.down,'top')},
+     {coord:[dts[18],116],value:'賣②跌破均線',itemStyle:{color:c.down},label:pill(c.down,'top')}]}}),
+     line('MA6',ma,c.l1,2)]};});
+
 /* ===== 6. 綁定 ===== */
 function v(id){return document.getElementById(id).value;}
+document.getElementById('dmi-p').addEventListener('input',RD['c-dmi']);
 ['ma-short','ma-long','ma-ema'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-ma']));
 ['macd-f','macd-s','macd-m'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-macd']));
 document.getElementById('rsi-p').addEventListener('input',RD['c-rsi']);
@@ -955,7 +1146,7 @@ const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links
 [...document.querySelectorAll('main section')].forEach(s=>spy.observe(s));
 
 /* ===== 7. 啟動 ===== */
-drawAnatomy(); drawPatterns();
+drawAnatomy(); drawPatterns(); drawDiverge();
 setTrendCase(); setRealtopCase(); setRealgapCase(); setVolCase(); setChipCases();
 ['ma','macd','rsi','kd','boll'].forEach(updateCase);
 applyMode('tw');
