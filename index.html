@@ -83,11 +83,17 @@ section{scroll-margin-top:70px; margin-bottom:42px}
 .banner h3{margin:0 0 6px; color:var(--accent)} .banner p{margin:0; font-size:14px; color:var(--ink2)}
 footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--muted); font-size:12.5px; border-top:1px solid var(--border)}
 @media print{
-  .topbar,.toc,.btn,.controls .hint{display:none !important}
+  /* 強制印出背景色（破解 Chrome「背景圖形」預設關閉）*/
+  *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
+  @page{ margin:12mm; }
+  .topbar,.toc,.btn,.controls,.mkt-tabs,.legend-note{display:none !important}
   body{background:#fff}
-  .wrap{display:block; max-width:none; padding:0} main{min-width:0}
-  section{break-before:page; margin-bottom:24px} section:first-of-type{break-before:avoid}
-  .card{break-inside:avoid; box-shadow:none; border-color:#ddd} .modhead{break-after:avoid}
+  .wrap{display:block; max-width:none; padding:0; gap:0} main{min-width:0}
+  /* 自然流動、不強制每節換頁；只避免「元素內部」被切斷 */
+  section{margin-bottom:8px}
+  .modhead{break-after:avoid} h2,h3{break-after:avoid}
+  .card{box-shadow:none; border-color:#ddd; padding:14px 16px; margin-bottom:14px; break-inside:avoid}
+  .chart,.formula,.kv,.casebox,.signal-table,.banner,.grid2,.card>.ch{break-inside:avoid}
 }
 @media(max-width:880px){.wrap{grid-template-columns:1fr} .toc{display:none}}
 </style>
@@ -482,7 +488,7 @@ function updateCase(card){const el=document.getElementById('case-'+card);if(el&&
 
 /* ===== 4. ECharts 工具 ===== */
 const RD={};
-function reg(id,fn){const inst=echarts.init(document.getElementById(id),null,{renderer:'canvas'});const run=()=>inst.setOption(fn(),true);RD[id]=run;window.addEventListener('resize',()=>inst.resize());return run;}
+function reg(id,fn){const inst=echarts.init(document.getElementById(id),null,{renderer:'canvas'});const run=()=>inst.setOption(Object.assign(fn(),{animation:false}),true);RD[id]=run;window.addEventListener('resize',()=>inst.resize());return run;}
 function renderAll(){Object.values(RD).forEach(fn=>fn());}
 function dateAxis(c,opt){return Object.assign({type:'category',axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},splitLine:{show:false},axisLabel:{color:c.axis,fontSize:11,formatter:v=>{const p=(''+v).split('-');return p.length>=3?p[0].slice(2)+'/'+p[1]:v;}}},opt||{});}
 function yAxis(c,opt){return Object.assign({scale:true,axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},axisLabel:{color:c.axis,fontSize:11},splitLine:{lineStyle:{color:c.grid,type:'dashed'}}},opt||{});}
@@ -515,7 +521,7 @@ function drawAnatomy(){const t=THEME[MODE];document.getElementById('svg-anatomy'
 reg('c-candles',function(){const c=C();const d=dsWindow('2330','2025-06-19','2026-06-18');
   return{backgroundColor:'transparent',grid:{left:50,right:18,top:16,bottom:46},tooltip:tip(),
    xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
-   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:50,end:100}],
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
    series:[candleSeries('台積電',d.kdata,c)]};});
 
 /* M1 真實趨勢：台積電 2023-2024，客觀 S/R + 示意趨勢線 */
@@ -605,7 +611,9 @@ reg('c-macd',function(){const c=C();const d=dsFor('macd');
    xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
    yAxis:[yAxis(c),yAxis(c,{gridIndex:1,scale:true,splitLine:{show:false}})],
    dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
-   series:[candleSeries(d.name,d.kdata,c),line('DIF',dif,c.l2,1.5),line('DEA',dea,c.l1,1.5),
+   series:[candleSeries(d.name,d.kdata,c),
+     Object.assign(line('DIF',dif,c.l2,1.5),{xAxisIndex:1,yAxisIndex:1}),
+     Object.assign(line('DEA',dea,c.l1,1.5),{xAxisIndex:1,yAxisIndex:1}),
      {name:'MACD',type:'bar',xAxisIndex:1,yAxisIndex:1,data:bc}]};});
 
 /* M4 RSI */
@@ -698,7 +706,7 @@ reg('c-combo',function(){const c=C();const d=dsWindow('2330','2024-09-01','2026-
    yAxis:[yAxis(c),yAxis(c,{gridIndex:1,splitLine:{show:false},axisLabel:{show:false},name:'量',nameTextStyle:{color:c.axis,fontSize:10}}),
      yAxis(c,{gridIndex:2,splitLine:{show:false},axisLabel:{show:false},name:'MACD',nameTextStyle:{color:c.axis,fontSize:10}}),
      yAxis(c,{gridIndex:3,min:0,max:100,interval:50,scale:false,name:'KD',nameTextStyle:{color:c.axis,fontSize:10}})],
-   dataZoom:[{type:'inside',xAxisIndex:[0,1,2,3]},{type:'slider',xAxisIndex:[0,1,2,3],height:16,bottom:4,start:35,end:100}],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1,2,3]},{type:'slider',xAxisIndex:[0,1,2,3],height:16,bottom:4,start:0,end:100}],
    series:[candleSeries('台積電',d.kdata,c),line('MA5',ma5,c.l1,1.5),line('MA20',ma20,c.l2,1.5),
      Object.assign(line('上軌',up,c.l3,1),{lineStyle:{width:1,color:c.l3,type:'dashed'}}),
      Object.assign(line('下軌',low,c.l3,1),{lineStyle:{width:1,color:c.l3,type:'dashed'}}),
@@ -715,7 +723,7 @@ reg('c-inst',function(){const c=C();const ch=CASES.chips['2330'];const d=ch.date
    xAxis:[dateAxis(c,{data:d}),dateAxis(c,{gridIndex:1,data:d,axisLabel:{show:false}})],
    yAxis:[yAxis(c,{name:'收盤(元)',nameTextStyle:{color:c.axis,fontSize:10}}),
      yAxis(c,{gridIndex:1,scale:true,splitLine:{show:false},name:'買賣超(張)',nameTextStyle:{color:c.axis,fontSize:10}})],
-   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:60,end:100}],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
    series:[line('收盤',ch.close,c.accent,2),
      {name:'外資',type:'bar',stack:'inst',xAxisIndex:1,yAxisIndex:1,data:ch.foreign,itemStyle:{color:c.l2}},
      {name:'投信',type:'bar',stack:'inst',xAxisIndex:1,yAxisIndex:1,data:ch.trust,itemStyle:{color:c.l1}},
@@ -768,6 +776,14 @@ document.querySelectorAll('.mkt-tabs').forEach(tabs=>{const card=tabs.dataset.ca
 // 顏色模式
 document.querySelectorAll('#mkt-seg button').forEach(b=>b.addEventListener('click',()=>applyMode(b.dataset.mode)));
 document.getElementById('btn-print').addEventListener('click',()=>window.print());
+
+// 列印時只隱藏 canvas 內的 dataZoom 滑桿（動畫已關，不重繪資料、無左1/4問題）
+function toggleSliders(show){document.querySelectorAll('.chart').forEach(el=>{
+  const inst=echarts.getInstanceByDom(el); if(!inst)return;
+  const dz=(inst.getOption().dataZoom||[]).map(z=>Object.assign({},z,z.type==='slider'?{show}:{}));
+  if(dz.length) inst.setOption({dataZoom:dz});});}
+window.addEventListener('beforeprint',()=>toggleSliders(false));
+window.addEventListener('afterprint',()=>toggleSliders(true));
 
 // 存圖 PNG
 document.querySelectorAll('[data-shot]').forEach(btn=>{btn.addEventListener('click',async()=>{
