@@ -225,17 +225,26 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
         <div class="casebox" id="case-realtop"></div>
       </div>
 
-      <div class="grid2">
-        <div class="card">
-          <div class="ch"><h3>雙重頂／底（示意）</h3><button class="btn" data-shot="card-double">⬇ 存圖</button></div>
-          <p class="sub">M 頭見頂、W 底見底。兩峰／谷價位相近且量縮，跌破／突破頸線確認。</p>
-          <div id="card-double"><div id="c-double" class="chart"></div></div>
+      <div class="card">
+        <div class="ch"><h3>雙重頂 ／ 雙重底（示意）</h3><button class="btn" data-shot="card-double">⬇ 存圖</button></div>
+        <p class="sub">兩種對稱的反轉型態：<b>M 頭（雙重頂）</b>見頂、<b>W 底（雙重底）</b>見底。兩峰／兩谷價位相近且量縮，<b>跌破／突破頸線</b>才算確認，目標幅度≈型態高度。</p>
+        <div id="card-double">
+          <div class="grid2">
+            <div>
+              <div style="font-size:13px;font-weight:800;text-align:center;color:var(--down);margin-bottom:2px">M 頭（雙重頂）· 見頂轉跌</div>
+              <div id="c-double-top" class="chart"></div>
+            </div>
+            <div>
+              <div style="font-size:13px;font-weight:800;text-align:center;color:var(--up);margin-bottom:2px">W 底（雙重底）· 見底轉漲</div>
+              <div id="c-double-bottom" class="chart"></div>
+            </div>
+          </div>
         </div>
-        <div class="card">
-          <div class="ch"><h3>三角收斂（示意）</h3><button class="btn" data-shot="card-triangle">⬇ 存圖</button></div>
-          <p class="sub">高點下降、低點上升，波動收窄＝多空猶豫，末端帶量選方向突破。</p>
-          <div id="card-triangle"><div id="c-triangle" class="chart"></div></div>
-        </div>
+      </div>
+      <div class="card">
+        <div class="ch"><h3>三角收斂（示意）</h3><button class="btn" data-shot="card-triangle">⬇ 存圖</button></div>
+        <p class="sub">高點下降、低點上升，波動收窄＝多空猶豫，末端帶量選方向突破。</p>
+        <div id="card-triangle"><div id="c-triangle" class="chart"></div></div>
       </div>
 
       <div class="card">
@@ -638,11 +647,18 @@ patternChart('c-hs',[100,103,107,104,101,105,110,116,112,107,103,107,111,108,103
     {coord:[d[7],121],value:'頭',itemStyle:{color:c.accent},label:{offset:[0,-14]}},
     {coord:[d[12],116],value:'右肩',itemStyle:{color:c.accent},label:{offset:[0,-14]}},
     {coord:[d[14],100],value:'跌破',itemStyle:{color:c.down},label:{offset:[0,18]}}]}}));
-patternChart('c-double',[100,104,109,106,102,99,103,108,109,105,100,96,92],42,(d,cl,c)=>({
+patternChart('c-double-top',[100,104,109,106,102,99,103,108,109,105,100,96,92],42,(d,cl,c)=>({
   line:{symbol:'none',label:{color:c.ink,fontSize:11},data:[[{name:'頸線',coord:[d[3],102],lineStyle:{color:c.down,type:'dashed',width:2}},{coord:[d[10],102]}]]},
   point:{label:{color:'#fff',fontSize:10,fontWeight:700},symbolSize:1,data:[
     {coord:[d[2],114],value:'頂1',itemStyle:{color:c.accent},label:{offset:[0,-12]}},
-    {coord:[d[8],114],value:'頂2',itemStyle:{color:c.accent},label:{offset:[0,-12]}}]}}));
+    {coord:[d[8],114],value:'頂2',itemStyle:{color:c.accent},label:{offset:[0,-12]}},
+    {coord:[d[11],94],value:'跌破',itemStyle:{color:c.down},label:{offset:[0,16]}}]}}));
+patternChart('c-double-bottom',[108,103,99,97,101,104,100,98,97,102,107,111],43,(d,cl,c)=>({
+  line:{symbol:'none',label:{color:c.ink,fontSize:11},data:[[{name:'頸線',coord:[d[1],104],lineStyle:{color:c.up,type:'dashed',width:2}},{coord:[d[10],104]}]]},
+  point:{label:{color:'#fff',fontSize:10,fontWeight:700},symbolSize:1,data:[
+    {coord:[d[3],95],value:'底1',itemStyle:{color:c.accent},label:{offset:[0,16]}},
+    {coord:[d[8],95],value:'底2',itemStyle:{color:c.accent},label:{offset:[0,16]}},
+    {coord:[d[10],109],value:'突破',itemStyle:{color:c.up},label:{offset:[0,-12]}}]}}));
 patternChart('c-triangle',[100,112,103,110,105,108.5,106,107.5,106.8,107.2,107,112,118],53,(d,cl,c)=>({
   line:{symbol:'none',label:{show:false},data:[
     [{coord:[d[1],112.5],lineStyle:{color:c.down,width:2}},{coord:[d[10],108]}],
