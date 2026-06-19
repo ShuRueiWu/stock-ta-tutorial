@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>股市技術分析完整教學</title>
+<script src="libs/echarts.min.js"></script>
+<script src="libs/html2canvas.min.js"></script>
+<script src="cases.js"></script>
+<style>
+:root{
+  /* 暖米白淺色主題 */
+  --bg:#F6F0E6; --card:#FFFCF6; --ink:#3C352E; --ink2:#6B6157; --muted:#968A7C;
+  --border:#E7DCCB; --border2:#EFE7D8; --accent:#B5673B; --accent-soft:#F0E2D2;
+  --shadow:0 1px 3px rgba(120,90,50,.08),0 6px 20px rgba(120,90,50,.06);
+  --up:#D23B3B; --down:#1C9C5B;
+  --grid:#ECE2D2; --axis:#8E8473;
+  --l1:#E0962F; --l2:#3D77C9; --l3:#9B59B6; --l4:#149C8E; --l5:#C24E78;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0; background:var(--bg); color:var(--ink);
+  font-family:-apple-system,"PingFang TC","Noto Sans TC","Helvetica Neue",Arial,sans-serif;
+  line-height:1.7; -webkit-font-smoothing:antialiased;}
+.topbar{position:sticky; top:0; z-index:50; background:rgba(246,240,230,.92);
+  backdrop-filter:saturate(1.4) blur(8px); border-bottom:1px solid var(--border);
+  display:flex; align-items:center; gap:14px; padding:10px 20px;}
+.topbar h1{font-size:17px; margin:0; font-weight:700; letter-spacing:.3px; white-space:nowrap}
+.seg{display:inline-flex; background:var(--accent-soft); border:1px solid var(--border); border-radius:10px; padding:3px; gap:2px}
+.seg button{border:0; background:transparent; color:var(--ink2); font-size:13px; font-weight:600; padding:6px 12px; border-radius:7px; cursor:pointer; font-family:inherit;}
+.seg button.on{background:var(--card); color:var(--accent); box-shadow:var(--shadow)}
+.btn{border:1px solid var(--border); background:var(--card); color:var(--ink); cursor:pointer; font-size:13px; font-weight:600; padding:7px 13px; border-radius:9px; font-family:inherit; display:inline-flex; align-items:center; gap:6px;}
+.btn:hover{border-color:var(--accent); color:var(--accent)}
+.wrap{display:grid; grid-template-columns:230px minmax(0,1fr); gap:28px; max-width:1180px; margin:0 auto; padding:24px 20px 80px}
+.toc{position:sticky; top:64px; align-self:start; font-size:13.5px; max-height:calc(100vh - 90px); overflow:auto}
+.toc .grp{font-size:11px; text-transform:uppercase; letter-spacing:.8px; color:var(--muted); margin:16px 0 6px; font-weight:700}
+.toc a{display:block; color:var(--ink2); text-decoration:none; padding:5px 10px; border-radius:7px; border-left:2px solid transparent}
+.toc a:hover{background:var(--accent-soft); color:var(--accent)}
+.toc a.active{background:var(--card); color:var(--accent); border-left-color:var(--accent); font-weight:600; box-shadow:var(--shadow)}
+main{min-width:0}
+section{scroll-margin-top:70px; margin-bottom:42px}
+.modhead{display:flex; align-items:baseline; gap:12px; margin:8px 0 18px; padding-bottom:10px; border-bottom:2px solid var(--border)}
+.modhead .no{font-size:13px; font-weight:800; color:#fff; background:var(--accent); padding:3px 10px; border-radius:20px}
+.modhead h2{font-size:22px; margin:0; font-weight:800}
+.lede{color:var(--ink2); margin:0 0 18px; font-size:15px}
+.card{background:var(--card); border:1px solid var(--border); border-radius:16px; padding:20px 22px; box-shadow:var(--shadow); margin-bottom:22px}
+.card>.ch{display:flex; align-items:center; justify-content:space-between; gap:10px; margin-bottom:4px; flex-wrap:wrap}
+.card h3{font-size:18px; margin:0; font-weight:800}
+.tag{font-size:12px; font-weight:700; color:var(--accent); background:var(--accent-soft); padding:2px 9px; border-radius:20px; margin-left:8px; vertical-align:middle}
+.tag.rev{color:var(--down); background:rgba(28,156,91,.1)}
+.card .sub{color:var(--muted); font-size:13px; margin:2px 0 14px}
+.grid2{display:grid; grid-template-columns:1fr 1fr; gap:14px}
+@media(max-width:760px){.grid2{grid-template-columns:1fr}}
+.kv{background:#FBF6EC; border:1px solid var(--border2); border-radius:11px; padding:12px 14px}
+.kv h4{margin:0 0 4px; font-size:13px; font-weight:800; color:var(--accent); letter-spacing:.3px}
+.kv p,.kv ul{margin:0; font-size:13.5px; color:var(--ink2)} .kv ul{padding-left:18px} .kv li{margin:2px 0}
+.formula{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace; font-size:13px; background:#F4ECDD; border:1px dashed var(--border); border-radius:8px; padding:8px 11px; color:#5b5246; overflow-x:auto; white-space:pre-wrap; word-break:break-word}
+.warn{border-left:3px solid var(--down)} .warn h4{color:var(--down)}
+.up-c{color:var(--up); font-weight:700} .down-c{color:var(--down); font-weight:700}
+.c-red{color:#D23B3B; font-weight:700} .c-green{color:#1C9C5B; font-weight:700}
+.chart{width:100%; height:340px} .chart.tall{height:560px}
+.controls{display:flex; flex-wrap:wrap; gap:18px; align-items:center; background:#FBF6EC; border:1px solid var(--border2); border-radius:11px; padding:12px 16px; margin:12px 0}
+.controls .grp{display:flex; align-items:center; gap:10px; font-size:13px; color:var(--ink2)}
+.controls label{font-weight:700; white-space:nowrap}
+.controls input[type=range]{accent-color:var(--accent); width:130px}
+.controls .val{font-variant-numeric:tabular-nums; font-weight:800; color:var(--accent); min-width:26px; text-align:center; background:var(--card); border:1px solid var(--border); border-radius:6px; padding:1px 6px}
+.controls .hint{color:var(--muted); font-size:12px}
+/* 市場切換（台股/美股各一例）*/
+.mkt-tabs{display:inline-flex; gap:4px; background:var(--accent-soft); border:1px solid var(--border); border-radius:9px; padding:3px}
+.mkt-tabs button{border:0; background:transparent; color:var(--ink2); font-size:12.5px; font-weight:700; padding:5px 11px; border-radius:6px; cursor:pointer; font-family:inherit}
+.mkt-tabs button.on{background:var(--card); color:var(--accent); box-shadow:var(--shadow)}
+/* 真實案例框 */
+.casebox{background:linear-gradient(180deg,#FFF8EC,#FBEFD9); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:10px; padding:11px 15px; margin-top:12px; font-size:13.5px; color:var(--ink2)}
+.casebox b{color:var(--accent)}
+.casebox .meta{color:var(--muted); font-size:12px; margin-top:3px}
+.legend-note{font-size:12.5px; color:var(--muted); margin-top:8px; display:flex; flex-wrap:wrap; gap:14px}
+.legend-note span{display:inline-flex; align-items:center; gap:5px}
+.dot{width:10px;height:10px;border-radius:50%;display:inline-block}
+.signal-table{width:100%; border-collapse:collapse; font-size:13.5px; margin-top:6px}
+.signal-table th,.signal-table td{text-align:left; padding:8px 10px; border-bottom:1px solid var(--border2)}
+.signal-table th{color:var(--accent); font-size:12px; text-transform:uppercase; letter-spacing:.5px}
+.banner{background:linear-gradient(180deg,#FFF8EC,#FBEFD9); border:1px solid var(--border); border-radius:16px; padding:18px 22px; margin-bottom:22px}
+.banner h3{margin:0 0 6px; color:var(--accent)} .banner p{margin:0; font-size:14px; color:var(--ink2)}
+footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--muted); font-size:12.5px; border-top:1px solid var(--border)}
+@media print{
+  .topbar,.toc,.btn,.controls .hint{display:none !important}
+  body{background:#fff}
+  .wrap{display:block; max-width:none; padding:0} main{min-width:0}
+  section{break-before:page; margin-bottom:24px} section:first-of-type{break-before:avoid}
+  .card{break-inside:avoid; box-shadow:none; border-color:#ddd} .modhead{break-after:avoid}
+}
+@media(max-width:880px){.wrap{grid-template-columns:1fr} .toc{display:none}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <h1>📈 技術分析完整教學</h1>
+  <div class="seg" id="mkt-seg">
+    <button data-mode="tw" class="on">台股｜紅漲綠跌</button>
+    <button data-mode="us">美股｜綠漲紅跌</button>
+  </div>
+  <div style="flex:1"></div>
+  <button class="btn" id="btn-print">🖨️ 存成 PDF</button>
+</div>
+
+<div class="wrap">
+  <nav class="toc" id="toc">
+    <div class="grp">基礎</div>
+    <a href="#m0">0 · K 線與顏色習慣</a>
+    <a href="#m1">1 · 趨勢與支撐壓力</a>
+    <div class="grp">型態學</div>
+    <a href="#m2">2 · 反轉與整理型態</a>
+    <div class="grp">指標</div>
+    <a href="#m3">3 · 均線系統 MA/EMA</a>
+    <a href="#m4">4 · 動能 MACD/RSI/KD</a>
+    <a href="#m5">5 · 通道與乖離 BOLL/BIAS</a>
+    <a href="#m6">6 · 量能 Volume/OBV</a>
+    <div class="grp">籌碼面（台股）</div>
+    <a href="#m7">7 · 法人 · 融資券 · 外資</a>
+    <div class="grp">實戰</div>
+    <a href="#m8">8 · 多指標綜合看盤</a>
+  </nav>
+
+  <main>
+    <!-- ===== M0 ===== -->
+    <section id="m0">
+      <div class="modhead"><span class="no">0</span><h2>K 線基礎與顏色習慣</h2></div>
+      <p class="lede">K 線（Candlestick）是技術分析的最小單位，一根 K 線濃縮了一段時間內的「開、收、高、低」四個價格。本教材所有圖表皆採用<b>真實歷史資料</b>（台積電 2330、加權指數、NVIDIA、Apple），讓你對照課本理論與市場實況。</p>
+
+      <div class="banner">
+        <h3>🎨 紅綠漲跌：台股 vs 國際剛好相反</h3>
+        <p><b>台股 / 中港股</b>：上漲＝<span class="c-red">紅 K</span>、下跌＝<span class="c-green">綠 K</span>（紅喜綠憂的東方文化）。<br>
+        <b>美股 / 歐股</b>：上漲＝<span class="c-green">綠</span>、下跌＝<span class="c-red">紅</span>（綠燈通行、紅燈停的西方直覺）。<br>
+        右上角切換鈕會讓<b>全站每一張圖</b>的漲跌色同步翻轉。目前模式：<b id="mode-label">台股（紅漲綠跌）</b>。</p>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>一根 K 線的解剖</h3><button class="btn" data-shot="card-anatomy">⬇ 存圖</button></div>
+        <p class="sub">實體（Body）＝開盤與收盤之間；影線（Shadow / Wick）＝最高最低的延伸。</p>
+        <div id="card-anatomy">
+          <div id="svg-anatomy" style="display:flex;justify-content:center;padding:6px 0"></div>
+          <div class="grid2" style="margin-top:8px">
+            <div class="kv"><h4>陽線（收 > 開）</h4><p>收盤高於開盤，買方掌控。台股顯示<span class="c-red">紅</span>，美股顯示<span class="c-green">綠</span>。實體越長代表多方力道越強。</p></div>
+            <div class="kv"><h4>陰線（收 < 開）</h4><p>收盤低於開盤，賣方掌控。台股顯示<span class="c-green">綠</span>，美股顯示<span class="c-red">紅</span>。上影線長＝衝高被壓回；下影線長＝殺低被買回。</p></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>真實 K 線：台積電近一年</h3><button class="btn" data-shot="card-candles">⬇ 存圖</button></div>
+        <p class="sub">真實日線。把游標移到 K 棒上可看當日開高低收。注意紅綠交錯、長短實體與影線。</p>
+        <div id="card-candles"><div id="c-candles" class="chart"></div></div>
+        <div class="legend-note">
+          <span><span class="dot" style="background:var(--up)"></span>陽線（漲）</span>
+          <span><span class="dot" style="background:var(--down)"></span>陰線（跌）</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== M1 ===== -->
+    <section id="m1">
+      <div class="modhead"><span class="no">1</span><h2>趨勢、支撐與壓力</h2></div>
+      <p class="lede">「順勢而為」是技術分析第一原則。支撐（Support）是跌不下去的價格帶，壓力（Resistance）是漲不上去的價格帶；趨勢線連接波段高低點。</p>
+      <div class="card">
+        <div class="ch"><h3>真實上升趨勢：台積電 2023–2024</h3><button class="btn" data-shot="card-trend">⬇ 存圖</button></div>
+        <p class="sub">水平虛線＝此區間的真實最高（壓力）與最低（支撐）；斜線＝沿波段低點的上升趨勢（示意連線）。</p>
+        <div id="card-trend"><div id="c-trend" class="chart tall"></div></div>
+        <div class="casebox" id="case-trend"></div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="kv"><h4>趨勢三型</h4><ul><li><b>上升</b>：高點越來越高、低點越來越高</li><li><b>下降</b>：高低點皆越來越低</li><li><b>盤整</b>：在支撐壓力間來回</li></ul></div>
+          <div class="kv"><h4>角色互換</h4><p>壓力一旦帶量突破，往往變成新的支撐（反之亦然）。這是「頸線」「箱型突破」的理論基礎。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== M2 ===== -->
+    <section id="m2">
+      <div class="modhead"><span class="no">2</span><h2>反轉與整理型態</h2></div>
+      <p class="lede">型態是群眾心理在價格上的指紋。下方<b>示意圖</b>呈現課本的理想形狀；<b>真實案例</b>則取自市場實際走勢 —— 提醒你：真實型態通常沒有課本那麼乾淨。</p>
+
+      <div class="card">
+        <div class="ch"><h3>頭肩頂 / M 頭<span class="tag rev">反轉示意</span></h3><button class="btn" data-shot="card-hs">⬇ 存圖</button></div>
+        <p class="sub">理想形：左肩、頭、右肩三高峰，頭最高；連兩谷＝頸線。<b>跌破頸線</b>確認反轉，目標跌幅≈頭到頸線高度。</p>
+        <div id="card-hs"><div id="c-hs" class="chart"></div></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>真實頭部反轉：加權指數 2022 空頭<span class="tag rev">真實案例</span></h3><button class="btn" data-shot="card-realtop">⬇ 存圖</button></div>
+        <p class="sub">課本型態在真實市場的對照。加權指數 2022 年的頂部 → 一路破底的真實過程。</p>
+        <div id="card-realtop"><div id="c-realtop" class="chart tall"></div></div>
+        <div class="casebox" id="case-realtop"></div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="ch"><h3>雙重頂／底（示意）</h3><button class="btn" data-shot="card-double">⬇ 存圖</button></div>
+          <p class="sub">M 頭見頂、W 底見底。兩峰／谷價位相近且量縮，跌破／突破頸線確認。</p>
+          <div id="card-double"><div id="c-double" class="chart"></div></div>
+        </div>
+        <div class="card">
+          <div class="ch"><h3>三角收斂（示意）</h3><button class="btn" data-shot="card-triangle">⬇ 存圖</button></div>
+          <p class="sub">高點下降、低點上升，波動收窄＝多空猶豫，末端帶量選方向突破。</p>
+          <div id="card-triangle"><div id="c-triangle" class="chart"></div></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>真實跳空缺口：NVIDIA 2023 財報<span class="tag rev">真實案例</span></h3><button class="btn" data-shot="card-realgap">⬇ 存圖</button></div>
+        <p class="sub">缺口（Gap）＝跳空形成的價格真空。這是客觀事件：NVIDIA 2023/05 財報後的<b>突破缺口</b>，揭開 AI 行情序幕。</p>
+        <div id="card-realgap"><div id="c-realgap" class="chart"></div></div>
+        <div class="casebox" id="case-realgap"></div>
+      </div>
+    </section>
+
+    <!-- ===== M3 ===== -->
+    <section id="m3">
+      <div class="modhead"><span class="no">3</span><h2>均線系統 MA / EMA</h2></div>
+      <p class="lede">移動平均線把噪音抹平、顯示趨勢方向。SMA 是簡單平均；EMA 加重近期權重、反應更快。下圖用真實資料，圖上交叉皆為實際計算結果。</p>
+      <div class="card">
+        <div class="ch">
+          <div><h3>黃金 / 死亡交叉<span class="tag">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center">
+            <div class="mkt-tabs" data-card="ma"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div>
+            <button class="btn" data-shot="card-ma">⬇ 存圖</button>
+          </div>
+        </div>
+        <p class="sub">短均上穿長均＝<span class="up-c">黃金交叉（偏多）</span>；下穿＝<span class="down-c">死亡交叉（偏空）</span>。拖動滑桿改天數即時重算。</p>
+        <div class="controls">
+          <div class="grp"><label>短期 MA</label><input type="range" id="ma-short" min="3" max="60" value="20"><span class="val" id="ma-short-v">20</span><span class="hint">日</span></div>
+          <div class="grp"><label>長期 MA</label><input type="range" id="ma-long" min="20" max="120" value="60"><span class="val" id="ma-long-v">60</span><span class="hint">日</span></div>
+          <div class="grp"><label><input type="checkbox" id="ma-ema"> 用 EMA</label></div>
+        </div>
+        <div id="card-ma"><div id="c-ma" class="chart tall"></div></div>
+        <div class="casebox" id="case-ma"></div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="kv"><h4>多頭排列</h4><p>短均 > 中均 > 長均且都上揚，是最強多方結構。空頭排列完全相反。</p></div>
+          <div class="kv warn"><h4>盤整時的陷阱</h4><p>橫盤時均線糾結、交叉訊號「上沖下洗」連續假訊號。均線是<b>落後指標</b>，趨勢盤好用、盤整盤失靈。</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ===== M4 ===== -->
+    <section id="m4">
+      <div class="modhead"><span class="no">4</span><h2>動能指標 MACD · RSI · KD</h2></div>
+      <p class="lede">動能（Momentum）指標衡量「漲跌的力道與速度」，常用來抓轉折與背離。以下皆真實資料、可調參數即時重算，並可切換台股 / 美股對照。</p>
+
+      <div class="card">
+        <div class="ch"><div><h3>MACD<span class="tag">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="macd"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-macd">⬇ 存圖</button></div></div>
+        <p class="sub">DIF（快線）＝EMA快−EMA慢；DEA（訊號線）＝DIF 的 EMA；柱狀體＝(DIF−DEA)×2。</p>
+        <div class="formula">DIF = EMA(close,12) − EMA(close,26)
+DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
+        <div class="controls">
+          <div class="grp"><label>快線</label><input type="range" id="macd-f" min="5" max="20" value="12"><span class="val" id="macd-f-v">12</span></div>
+          <div class="grp"><label>慢線</label><input type="range" id="macd-s" min="20" max="40" value="26"><span class="val" id="macd-s-v">26</span></div>
+          <div class="grp"><label>訊號</label><input type="range" id="macd-m" min="3" max="15" value="9"><span class="val" id="macd-m-v">9</span></div>
+        </div>
+        <div id="card-macd"><div id="c-macd" class="chart tall"></div></div>
+        <div class="casebox" id="case-macd"></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><div><h3>RSI 相對強弱<span class="tag">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="rsi"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-rsi">⬇ 存圖</button></div></div>
+        <p class="sub">把一段期間的漲幅占比換算成 0–100。70 以上超買、30 以下超賣。</p>
+        <div class="formula">RSI = 100 − 100 / (1 + 平均漲幅 / 平均跌幅)</div>
+        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="rsi-p" min="5" max="30" value="14"><span class="val" id="rsi-p-v">14</span><span class="hint">日</span></div></div>
+        <div id="card-rsi"><div id="c-rsi" class="chart tall"></div></div>
+        <div class="casebox" id="case-rsi"></div>
+        <div class="kv warn" style="margin-top:8px"><h4>強勢股的鈍化陷阱</h4><p>多頭噴出時 RSI 可長期黏在 70 以上（鈍化），此時「超買就賣」會太早下車。背離（價新高、RSI 不創高）比絕對數值更可靠。</p></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><div><h3>KD 隨機指標<span class="tag">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="kd"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 Apple</button></div><button class="btn" data-shot="card-kd">⬇ 存圖</button></div></div>
+        <p class="sub">衡量收盤在近期高低區間的相對位置。K 快線、D 慢線，20 以下超賣、80 以上超買。台股最常用。</p>
+        <div class="formula">RSV = (收盤 − N日最低) / (N日最高 − N日最低) × 100
+K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
+        <div class="controls"><div class="grp"><label>RSV 週期</label><input type="range" id="kd-p" min="5" max="21" value="9"><span class="val" id="kd-p-v">9</span><span class="hint">日</span></div></div>
+        <div id="card-kd"><div id="c-kd" class="chart tall"></div></div>
+        <div class="casebox" id="case-kd"></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>威廉指標 Williams %R<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-wr">⬇ 存圖</button></div>
+        <p class="sub">與 KD 同源、方向相反，刻度 0 ~ −100。−20 以上超買、−80 以下超賣，反應靈敏適合短線。資料：台積電近一年半。</p>
+        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="wr-p" min="5" max="28" value="14"><span class="val" id="wr-p-v">14</span><span class="hint">日</span></div></div>
+        <div id="card-wr"><div id="c-wr" class="chart"></div></div>
+      </div>
+    </section>
+
+    <!-- ===== M5 ===== -->
+    <section id="m5">
+      <div class="modhead"><span class="no">5</span><h2>通道與乖離 BOLL · BIAS</h2></div>
+      <p class="lede">通道類指標用「波動度」框出合理區間，乖離率衡量價格偏離均線多遠 —— 都在回答：現在是不是漲（跌）過頭了？</p>
+
+      <div class="card">
+        <div class="ch"><div><h3>布林通道 Bollinger Bands<span class="tag">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="boll"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-boll">⬇ 存圖</button></div></div>
+        <p class="sub">中軌＝N 日均線；上下軌＝中軌 ± K 倍標準差。通道縮口（Squeeze）後常出現大行情。</p>
+        <div class="formula">中軌 = SMA(close, N) ；  上/下軌 = 中軌 ± K × 標準差</div>
+        <div class="controls">
+          <div class="grp"><label>週期 N</label><input type="range" id="boll-p" min="10" max="40" value="20"><span class="val" id="boll-p-v">20</span></div>
+          <div class="grp"><label>倍數 K</label><input type="range" id="boll-k" min="10" max="30" value="20"><span class="val" id="boll-k-v">2.0</span><span class="hint">σ</span></div>
+        </div>
+        <div id="card-boll"><div id="c-boll" class="chart tall"></div></div>
+        <div class="casebox" id="case-boll"></div>
+        <div class="grid2" style="margin-top:8px">
+          <div class="kv"><h4>用法</h4><ul><li>觸下軌反彈、觸上軌回落（盤整時）</li><li>沿上軌「漫步」＝強勢續漲（趨勢時）</li><li>開口擴張＝波動放大、行情啟動</li></ul></div>
+          <div class="kv warn"><h4>限制</h4><p>布林假設報酬常態，極端行情會「破軌續走」。縮口能預告大行情<b>方向卻不告訴你</b>，需配合突破方向。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>乖離率 BIAS<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-bias">⬇ 存圖</button></div>
+        <p class="sub">(收盤 − 均線) ÷ 均線 ×100%。正乖離過大＝短線漲多易回；負乖離過大＝跌深易反彈。資料：NVIDIA。</p>
+        <div class="controls"><div class="grp"><label>均線週期</label><input type="range" id="bias-p" min="5" max="60" value="20"><span class="val" id="bias-p-v">20</span><span class="hint">日</span></div></div>
+        <div id="card-bias"><div id="c-bias" class="chart"></div></div>
+      </div>
+    </section>
+
+    <!-- ===== M6 ===== -->
+    <section id="m6">
+      <div class="modhead"><span class="no">6</span><h2>量能 Volume · OBV</h2></div>
+      <p class="lede">「量是因、價是果」。成交量是行情的燃料；量價配合（價漲量增）才健康，量價背離常是轉折前兆。</p>
+
+      <div class="card">
+        <div class="ch"><h3>真實量價：NVIDIA 2023 財報爆量</h3><button class="btn" data-shot="card-vol">⬇ 存圖</button></div>
+        <p class="sub">下方量柱顏色隨當日漲跌。觀察 2023/05 財報跳空那天的<b>巨量長紅</b>—— 教科書級的「價漲量增」啟動訊號。</p>
+        <div id="card-vol"><div id="c-vol" class="chart tall"></div></div>
+        <div class="casebox" id="case-vol"></div>
+        <table class="signal-table">
+          <tr><th>型態</th><th>解讀</th></tr>
+          <tr><td>價漲量增</td><td>健康上漲，買盤積極</td></tr>
+          <tr><td>價漲量縮</td><td>追價意願不足，漲勢存疑</td></tr>
+          <tr><td>價跌量增</td><td>賣壓沉重，恐慌殺盤</td></tr>
+          <tr><td>低檔爆量長紅</td><td>可能落底（轉折）</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>OBV 能量潮（台積電近兩年）</h3><button class="btn" data-shot="card-obv">⬇ 存圖</button></div>
+        <p class="sub">漲日加量、跌日減量，累積成線。OBV 與股價背離，透露主力進出的蛛絲馬跡。</p>
+        <div class="formula">漲：OBV = 前OBV + 今量 ；  跌：OBV = 前OBV − 今量</div>
+        <div id="card-obv"><div id="c-obv" class="chart"></div></div>
+        <div class="kv" style="margin-top:8px"><h4>背離判讀</h4><p>價橫盤但 OBV 走高 → 量能默默流入，醞釀上攻；價創高但 OBV 不創高 → 量能未跟上，漲勢虛胖。</p></div>
+      </div>
+    </section>
+
+    <!-- ===== M7 籌碼面 ===== -->
+    <section id="m7">
+      <div class="modhead"><span class="no">7</span><h2>籌碼面：法人 · 融資券 · 外資</h2></div>
+      <p class="lede">技術面看「價量」，籌碼面看「<b>誰在買、誰在賣</b>」。台股是法人與外資主導的市場，籌碼結構往往比指標更早透露方向。以下皆<b>台積電 2330 真實資料</b>（FinMind，2024 至今）。</p>
+
+      <div class="card">
+        <div class="ch"><h3>三大法人買賣超 vs 股價</h3><button class="btn" data-shot="card-inst">⬇ 存圖</button></div>
+        <p class="sub">上方為收盤價，下方為每日<b>外資 / 投信 / 自營</b>買賣超（堆疊，單位：張＝1000 股）。零軸以上＝買超、以下＝賣超。觀察外資連續買/賣超與股價的對應。</p>
+        <div id="card-inst"><div id="c-inst" class="chart tall"></div></div>
+        <div class="legend-note">
+          <span><span class="dot" style="background:var(--l2)"></span>外資</span>
+          <span><span class="dot" style="background:var(--l1)"></span>投信</span>
+          <span><span class="dot" style="background:var(--l3)"></span>自營商</span>
+        </div>
+        <div class="casebox" id="case-inst"></div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="kv"><h4>怎麼用</h4><ul><li><b>外資</b>：權值股的最大推手，連續買超＝趨勢盤</li><li><b>投信</b>：作帳行情（季底/年底）、中小型股影響大</li><li><b>自營</b>：短線、避險部位，雜訊較多</li></ul></div>
+          <div class="kv warn"><h4>陷阱</h4><p>「買超」可能含避險/套利對沖，不等於真看多。要看<b>連續性</b>與<b>佔成交比重</b>，單日數字易誤判。</p></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>融資融券餘額（散戶槓桿溫度計）</h3><button class="btn" data-shot="card-margin">⬇ 存圖</button></div>
+        <p class="sub">融資餘額＝散戶借錢做多的部位；融券餘額＝借券放空。單位：張。</p>
+        <div id="card-margin"><div id="c-margin" class="chart"></div></div>
+        <div class="casebox" id="case-margin"></div>
+        <table class="signal-table">
+          <tr><th>現象</th><th>解讀</th></tr>
+          <tr><td>融資大增、股價漲</td><td>散戶追價，籌碼變亂、易回檔</td></tr>
+          <tr><td>融資大減、股價跌</td><td>斷頭洗清浮額，常見打底訊號</td></tr>
+          <tr><td>融券大增</td><td>空方積極，但過高有「軋空」風險</td></tr>
+        </table>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>外資持股比率趨勢</h3><button class="btn" data-shot="card-foreign">⬇ 存圖</button></div>
+        <p class="sub">外資持有佔已發行股數的比率（%）。長期趨升＝國際資金看好、籌碼安定；趨降＝資金撤離。</p>
+        <div id="card-foreign"><div id="c-foreign" class="chart"></div></div>
+        <div class="casebox" id="case-foreign"></div>
+      </div>
+    </section>
+
+    <!-- ===== M8 綜合 ===== -->
+    <section id="m8">
+      <div class="modhead"><span class="no">8</span><h2>多指標綜合看盤</h2></div>
+      <p class="lede">真實看盤不會只用一個指標。下圖把 K 線＋均線＋布林＋成交量＋MACD＋KD 疊在一起（可框選縮放），用台積電真實資料示範「多指標共振」。</p>
+      <div class="card">
+        <div class="ch"><h3>整合看盤面板：台積電<span class="tag">真實·可縮放</span></h3><button class="btn" data-shot="card-combo">⬇ 存圖</button></div>
+        <p class="sub">拖曳下方時間軸縮放。要訣：<b>趨勢看均線、轉折看背離、進場看量能、過熱看 KD/RSI</b>，多項同向（共振）勝率較高。</p>
+        <div id="card-combo"><div id="c-combo" class="chart" style="height:660px"></div></div>
+        <div class="grid2" style="margin-top:10px">
+          <div class="kv"><h4>多方共振範例</h4><ul><li>價站上 20MA 且均線多頭排列</li><li>突破布林中軌、開口向上</li><li>MACD 柱翻紅、KD 低檔黃金交叉</li><li>突破當日成交量明顯放大</li></ul></div>
+          <div class="kv warn"><h4>務必牢記</h4><ul><li>指標皆<b>落後</b>於價格，是輔助非聖杯</li><li>盤整盤所有震盪指標都會失靈</li><li>嚴設停損，技術分析管理機率不保證</li></ul></div>
+        </div>
+      </div>
+    </section>
+  </main>
+</div>
+
+<footer>
+  本教材為技術分析「教學」用途，圖表採用 Yahoo Finance 真實歷史日線（台積電 2330、加權指數 ^TWII、NVIDIA、Apple），<b>非投資建議</b>；指標訊號為程式實際計算，型態示意圖為理想化繪製。<br>
+  顏色模式：右上角可切換台股（紅漲綠跌）／美股（綠漲紅跌）。 · 存 PDF：點「🖨️ 存成 PDF」→ 列印目的地選「另存為 PDF」。 · 單卡存圖：各卡片「⬇ 存圖」輸出 2x PNG。 · 資料更新：重跑 <code>fetch_cases.py</code>。
+</footer>
+
+<script>
+/* ===== 1. 主題色 ===== */
+const THEME={tw:{up:'#D23B3B',down:'#1C9C5B',label:'台股（紅漲綠跌）'},us:{up:'#1C9C5B',down:'#D23B3B',label:'美股（綠漲紅跌）'}};
+let MODE='tw';
+function applyMode(m){MODE=m;const t=THEME[m];
+  document.documentElement.style.setProperty('--up',t.up);
+  document.documentElement.style.setProperty('--down',t.down);
+  document.getElementById('mode-label').textContent=t.label;
+  document.querySelectorAll('#mkt-seg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
+  renderAll(); drawAnatomy();}
+function C(){const cs=getComputedStyle(document.documentElement);return{
+  up:THEME[MODE].up,down:THEME[MODE].down,
+  grid:cs.getPropertyValue('--grid').trim(),axis:cs.getPropertyValue('--axis').trim(),
+  ink:cs.getPropertyValue('--ink2').trim(),card:cs.getPropertyValue('--card').trim(),
+  l1:cs.getPropertyValue('--l1').trim(),l2:cs.getPropertyValue('--l2').trim(),
+  l3:cs.getPropertyValue('--l3').trim(),l4:cs.getPropertyValue('--l4').trim(),
+  l5:cs.getPropertyValue('--l5').trim(),accent:cs.getPropertyValue('--accent').trim()};}
+
+/* ===== 2. 指標數學 ===== */
+function SMA(a,p){const o=[];for(let i=0;i<a.length;i++){if(i<p-1||a[i]==null){o.push(null);continue;}let s=0,ok=true;for(let j=0;j<p;j++){if(a[i-j]==null){ok=false;break;}s+=a[i-j];}o.push(ok?s/p:null);}return o;}
+function EMA(a,p){const o=[];const k=2/(p+1);let prev=null;for(let i=0;i<a.length;i++){const v=a[i];if(v==null){o.push(null);continue;}prev=prev==null?v:v*k+prev*(1-k);o.push(prev);}return o;}
+function MACD(close,f,s,m){const ef=EMA(close,f),es=EMA(close,s);const dif=ef.map((v,i)=>v-es[i]);const dea=EMA(dif,m);const bar=dif.map((v,i)=>(v-dea[i])*2);return{dif,dea,bar};}
+function RSI(close,p){const o=new Array(close.length).fill(null);let aG=0,aL=0;for(let i=1;i<close.length;i++){const ch=close[i]-close[i-1];const g=Math.max(ch,0),l=Math.max(-ch,0);if(i<=p){aG+=g;aL+=l;if(i===p){aG/=p;aL/=p;o[i]=100-100/(1+(aL===0?100:aG/aL));}}else{aG=(aG*(p-1)+g)/p;aL=(aL*(p-1)+l)/p;o[i]=100-100/(1+(aL===0?100:aG/aL));}}return o;}
+function KD(high,low,close,p){const K=new Array(close.length).fill(null),D=new Array(close.length).fill(null);let k=50,d=50;for(let i=0;i<close.length;i++){if(i<p-1)continue;let hh=-1e18,ll=1e18;for(let j=0;j<p;j++){hh=Math.max(hh,high[i-j]);ll=Math.min(ll,low[i-j]);}const rsv=hh===ll?50:(close[i]-ll)/(hh-ll)*100;k=2/3*k+1/3*rsv;d=2/3*d+1/3*k;K[i]=k;D[i]=d;}return{K,D};}
+function BOLL(close,p,mult){const mid=SMA(close,p);const up=[],low=[];for(let i=0;i<close.length;i++){if(i<p-1){up.push(null);low.push(null);continue;}let s=0;for(let j=0;j<p;j++)s+=(close[i-j]-mid[i])**2;const sd=Math.sqrt(s/p);up.push(mid[i]+mult*sd);low.push(mid[i]-mult*sd);}return{mid,up,low};}
+function BIAS(close,p){const ma=SMA(close,p);return close.map((v,i)=>ma[i]==null?null:(v-ma[i])/ma[i]*100);}
+function WR(high,low,close,p){const o=new Array(close.length).fill(null);for(let i=p-1;i<close.length;i++){let hh=-1e18,ll=1e18;for(let j=0;j<p;j++){hh=Math.max(hh,high[i-j]);ll=Math.min(ll,low[i-j]);}o[i]=hh===ll?0:(hh-close[i])/(hh-ll)*-100;}return o;}
+function OBV(close,vol){const o=[0];for(let i=1;i<close.length;i++){o.push(o[i-1]+(close[i]>close[i-1]?vol[i]:close[i]<close[i-1]?-vol[i]:0));}return o;}
+
+/* ===== 3. 真實資料存取 ===== */
+const SR=window.CASES.series;
+function dsWindow(key,d1,d2){
+  const s=SR[key],ds=s.dates;
+  let i1=0,i2=ds.length-1;
+  if(d1){const f=ds.findIndex(x=>x>=d1);i1=f<0?0:f;}
+  if(d2){for(let i=ds.length-1;i>=0;i--){if(ds[i]<=d2){i2=i;break;}}}
+  const sl=a=>a.slice(i1,i2+1);
+  const dates=sl(ds),o=sl(s.o),h=sl(s.h),l=sl(s.l),c=sl(s.c),v=sl(s.v);
+  const kdata=dates.map((_,i)=>[o[i],c[i],l[i],h[i]]);
+  return{name:s.name,currency:s.currency,market:s.market,dates,o,h,l,c,v,kdata,
+    open:o,high:h,low:l,close:c,vol:v};
+}
+// 重要指標：台/美各一窗格
+const WIN={
+  ma:  {tw:['2330','2022-12-01','2025-03-31'], us:['NVDA','2023-01-01','2025-03-31']},
+  macd:{tw:['2330','2024-01-01','2026-06-18'], us:['NVDA','2024-01-01','2026-06-18']},
+  rsi: {tw:['2330','2024-01-01','2026-06-18'], us:['NVDA','2024-01-01','2026-06-18']},
+  kd:  {tw:['2330','2024-09-01','2026-06-18'], us:['AAPL','2024-09-01','2026-06-18']},
+  boll:{tw:['2330','2023-06-01','2025-06-30'], us:['NVDA','2023-01-01','2025-03-31']},
+};
+const MKT={ma:'tw',macd:'tw',rsi:'tw',kd:'tw',boll:'tw'};
+function dsFor(card){return dsWindow(...WIN[card][MKT[card]]);}
+
+// 真實案例敘述（數字皆經建置時對帳）
+const NARR={
+  ma:{tw:'<b>台積電 2330（2022/12–2025/03）</b>：20MA 於 <b>2023/11/06（約 550 元）黃金交叉</b> 60MA 後波段走高，2024/10 觸及 1,100 元；2024/08/16 死亡交叉（969）對應期間回檔。圖上金/死叉皆為即時計算結果。',
+      us:'<b>NVIDIA（2023/01–2025/03）</b>：20MA 於 <b>2023/11/17（約 $49）黃金交叉</b> 60MA，領先 AI 主升段；2024/10/04 再度黃金交叉（$125）。死亡交叉多落在中段回檔。'},
+  macd:{tw:'<b>台積電 2330</b>：觀察 DIF 上穿 DEA（柱由綠/紅翻紅/綠）與股價波段的對應；柱狀體縮短常領先價格轉折。',
+        us:'<b>NVIDIA</b>：強勢段 MACD 柱長時間翻紅、DIF 高於 DEA；2024 多次「柱縮但價未跌」的背離可作為過熱警訊。'},
+  rsi:{tw:'<b>台積電 2330</b>：主升段 RSI 常站上 70 並鈍化，並非一見超買就該賣。',
+       us:'<b>NVIDIA</b>：2023–2024 AI 行情中 RSI 長期高檔鈍化是「強勢股」的典型 —— 用背離而非絕對值判頂。'},
+  kd:{tw:'<b>台積電 2330（近一年半）</b>：低檔（&lt;20）K 上穿 D 的黃金交叉多對應短線反彈起點。',
+      us:'<b>Apple（近一年半）</b>：區間整理時 KD 在 20–80 來回擺盪，超買超賣訊號較可靠；趨勢盤則易鈍化。'},
+  boll:{tw:'<b>台積電 2330</b>：通道縮口後常接大行情；突破上軌且開口擴張＝多方走強。',
+        us:'<b>NVIDIA（2023–2025）</b>：AI 飆漲期股價長期「沿上軌漫步」，是布林在強勢趨勢中的經典型 —— 此時碰上軌不代表該賣。'},
+};
+function updateCase(card){const el=document.getElementById('case-'+card);if(el&&NARR[card])el.innerHTML='📌 <b>真實案例</b>　'+NARR[card][MKT[card]];}
+
+/* ===== 4. ECharts 工具 ===== */
+const RD={};
+function reg(id,fn){const inst=echarts.init(document.getElementById(id),null,{renderer:'canvas'});const run=()=>inst.setOption(fn(),true);RD[id]=run;window.addEventListener('resize',()=>inst.resize());return run;}
+function renderAll(){Object.values(RD).forEach(fn=>fn());}
+function dateAxis(c,opt){return Object.assign({type:'category',axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},splitLine:{show:false},axisLabel:{color:c.axis,fontSize:11,formatter:v=>{const p=(''+v).split('-');return p.length>=3?p[0].slice(2)+'/'+p[1]:v;}}},opt||{});}
+function yAxis(c,opt){return Object.assign({scale:true,axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},axisLabel:{color:c.axis,fontSize:11},splitLine:{lineStyle:{color:c.grid,type:'dashed'}}},opt||{});}
+function candleSeries(name,kdata,c){return{name,type:'candlestick',data:kdata,itemStyle:{color:c.up,color0:c.down,borderColor:c.up,borderColor0:c.down}};}
+function line(name,data,color,w){return{name,type:'line',data,smooth:true,symbol:'none',lineStyle:{width:w||2,color},z:5};}
+function tip(){return{trigger:'axis',axisPointer:{type:'cross',lineStyle:{color:'#bbb'}},backgroundColor:'rgba(255,252,246,.96)',borderColor:'#E7DCCB',textStyle:{color:'#3C352E',fontSize:12}};}
+
+/* ===== 5. 圖表 ===== */
+/* M0 解剖 SVG */
+function drawAnatomy(){const t=THEME[MODE];document.getElementById('svg-anatomy').innerHTML=`
+<svg width="360" height="240" viewBox="0 0 360 240" font-family="inherit" font-size="12">
+ <line x1="90" y1="20" x2="90" y2="60" stroke="${t.up}" stroke-width="2"/>
+ <line x1="90" y1="160" x2="90" y2="210" stroke="${t.up}" stroke-width="2"/>
+ <rect x="72" y="60" width="36" height="100" rx="2" fill="${t.up}"/>
+ <text x="150" y="30" fill="#6B6157">最高 High</text><text x="150" y="68" fill="#6B6157">收盤 Close</text>
+ <text x="150" y="158" fill="#6B6157">開盤 Open</text><text x="150" y="208" fill="#6B6157">最低 Low</text>
+ <text x="60" y="232" fill="${t.up}" font-weight="700" text-anchor="middle">陽線 收>開</text>
+ <line x1="138" y1="25" x2="118" y2="25" stroke="#bbb" stroke-dasharray="2"/>
+ <line x1="138" y1="63" x2="110" y2="63" stroke="#bbb" stroke-dasharray="2"/>
+ <line x1="138" y1="153" x2="110" y2="153" stroke="#bbb" stroke-dasharray="2"/>
+ <line x1="138" y1="203" x2="118" y2="203" stroke="#bbb" stroke-dasharray="2"/>
+ <line x1="300" y1="20" x2="300" y2="70" stroke="${t.down}" stroke-width="2"/>
+ <line x1="300" y1="170" x2="300" y2="215" stroke="${t.down}" stroke-width="2"/>
+ <rect x="282" y="70" width="36" height="100" rx="2" fill="${t.down}"/>
+ <text x="300" y="232" fill="${t.down}" font-weight="700" text-anchor="middle">陰線 收<開</text>
+ <text x="246" y="120" fill="#968A7C" font-size="11" text-anchor="end" transform="rotate(-90 246 120)">實體 Body</text>
+</svg>`;}
+
+/* M0 真實 K 線：台積電近一年 */
+reg('c-candles',function(){const c=C();const d=dsWindow('2330','2025-06-19','2026-06-18');
+  return{backgroundColor:'transparent',grid:{left:50,right:18,top:16,bottom:46},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:50,end:100}],
+   series:[candleSeries('台積電',d.kdata,c)]};});
+
+/* M1 真實趨勢：台積電 2023-2024，客觀 S/R + 示意趨勢線 */
+reg('c-trend',function(){const c=C();const d=dsWindow('2330','2023-01-01','2024-12-31');
+  const hi=Math.max(...d.h),lo=Math.min(...d.l);
+  return{backgroundColor:'transparent',grid:{left:52,right:18,top:16,bottom:46},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[Object.assign(candleSeries('台積電',d.kdata,c),{markLine:{symbol:'none',label:{color:c.ink,fontSize:11},data:[
+     [{name:'上升趨勢(示意)',coord:[d.dates[5],d.l[5]],lineStyle:{color:c.accent,width:2}},{coord:[d.dates[d.dates.length-30],d.l[d.dates.length-30]]}],
+     [{name:'壓力 '+hi,yAxis:hi,lineStyle:{color:c.down,type:'dashed'}},{yAxis:hi}],
+     [{name:'支撐 '+lo,yAxis:lo,lineStyle:{color:c.up,type:'dashed'}},{yAxis:lo}]
+   ]}})]};});
+function setTrendCase(){document.getElementById('case-trend').innerHTML='📌 <b>真實案例</b>　台積電 2023/01–2024/12：自 2022/10 低點 370 元起，沿上升趨勢一路墊高，2024/10 創高 1,100 元，是典型「低點越來越高」的多頭結構。';}
+
+/* M2 型態示意（合成理想形）*/
+function synthOHLC(closes,seed){const rnd=(s=>()=>{s=(s*1103515245+12345)&0x7fffffff;return s/0x7fffffff;})(seed);
+  const kd=[];for(let i=0;i<closes.length;i++){const cl=closes[i];const op=i===0?cl*0.997:closes[i-1]*(1+(rnd()-0.5)*0.004);
+   const hi=Math.max(op,cl)*(1+rnd()*0.01),lo=Math.min(op,cl)*(1-rnd()*0.01);kd.push([+op.toFixed(2),+cl.toFixed(2),+lo.toFixed(2),+hi.toFixed(2)]);}return kd;}
+function synthLabels(n){const a=[];for(let i=1;i<=n;i++)a.push('T'+i);return a;}
+function patternChart(id,closes,seed,marks){reg(id,function(){const c=C();const kd=synthOHLC(closes,seed);const d=synthLabels(closes.length);const ml=marks(d,closes,c);
+  return{backgroundColor:'transparent',grid:{left:46,right:18,top:16,bottom:24},tooltip:tip(),
+   xAxis:{type:'category',data:d,axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false}},
+   yAxis:yAxis(c),series:[Object.assign(candleSeries('K',kd,c),{markLine:ml.line,markPoint:ml.point})]};});}
+patternChart('c-hs',[100,103,107,104,101,105,110,116,112,107,103,107,111,108,103,98,94],31,(d,cl,c)=>({
+  line:{symbol:'none',label:{color:c.ink,fontSize:11},data:[[{name:'頸線',coord:[d[4],101.5],lineStyle:{color:c.down,width:2,type:'dashed'}},{coord:[d[13],101.5]}]]},
+  point:{label:{color:'#fff',fontSize:10,fontWeight:700},symbolSize:1,data:[
+    {coord:[d[2],112],value:'左肩',itemStyle:{color:c.accent},label:{offset:[0,-14]}},
+    {coord:[d[7],121],value:'頭',itemStyle:{color:c.accent},label:{offset:[0,-14]}},
+    {coord:[d[12],116],value:'右肩',itemStyle:{color:c.accent},label:{offset:[0,-14]}},
+    {coord:[d[14],100],value:'跌破',itemStyle:{color:c.down},label:{offset:[0,18]}}]}}));
+patternChart('c-double',[100,104,109,106,102,99,103,108,109,105,100,96,92],42,(d,cl,c)=>({
+  line:{symbol:'none',label:{color:c.ink,fontSize:11},data:[[{name:'頸線',coord:[d[3],102],lineStyle:{color:c.down,type:'dashed',width:2}},{coord:[d[10],102]}]]},
+  point:{label:{color:'#fff',fontSize:10,fontWeight:700},symbolSize:1,data:[
+    {coord:[d[2],114],value:'頂1',itemStyle:{color:c.accent},label:{offset:[0,-12]}},
+    {coord:[d[8],114],value:'頂2',itemStyle:{color:c.accent},label:{offset:[0,-12]}}]}}));
+patternChart('c-triangle',[100,112,103,110,105,108.5,106,107.5,106.8,107.2,107,112,118],53,(d,cl,c)=>({
+  line:{symbol:'none',label:{show:false},data:[
+    [{coord:[d[1],112.5],lineStyle:{color:c.down,width:2}},{coord:[d[10],108]}],
+    [{coord:[d[0],100],lineStyle:{color:c.up,width:2}},{coord:[d[10],106.5]}]]},
+  point:{label:{color:'#fff',fontSize:10,fontWeight:700},symbolSize:1,data:[
+    {coord:[d[11],114],value:'突破',itemStyle:{color:c.up},label:{offset:[0,-12]}}]}}));
+
+/* M2 真實頭部反轉：^TWII 2021-2022 */
+reg('c-realtop',function(){const c=C();const d=dsWindow('TWII','2021-06-01','2022-12-31');
+  return{backgroundColor:'transparent',grid:{left:58,right:18,top:16,bottom:46},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[Object.assign(candleSeries('加權指數',d.kdata,c),{markPoint:{symbol:'pin',symbolSize:40,label:{color:'#fff',fontSize:10,fontWeight:700},data:[
+     {coord:['2022-01-05',18619.61],value:'頂 18619',itemStyle:{color:c.down}},
+     {coord:['2022-10-25',12629.48],value:'底 12629',itemStyle:{color:c.up}}]}})]};});
+function setRealtopCase(){document.getElementById('case-realtop').innerHTML='📌 <b>真實案例</b>　加權指數 2022 空頭：2022/01/05 見波段高 <b>18,619</b> 後頭部反轉，沿下降趨勢一路破底，至 2022/10/25 探低 <b>12,629</b>，波段重挫約 <b>−32%</b>。<div class="meta">對照課本頭肩頂：真實頂部往往是多次衝高失敗的「圓弧／複合頂」，少有教科書般工整。</div>';}
+
+/* M2 真實缺口：NVDA 2023 財報 */
+reg('c-realgap',function(){const c=C();const d=dsWindow('NVDA','2023-04-17','2023-07-14');
+  return{backgroundColor:'transparent',grid:{left:48,right:18,top:16,bottom:26},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   series:[Object.assign(candleSeries('NVDA',d.kdata,c),{markPoint:{symbol:'pin',symbolSize:38,label:{color:'#fff',fontSize:10,fontWeight:700},data:[
+     {coord:['2023-05-25',39],value:'跳空+26%',itemStyle:{color:c.up}}]},
+     markLine:{symbol:'none',label:{show:false},data:[[{xAxis:'2023-05-24',lineStyle:{color:c.accent,type:'dashed'}},{xAxis:'2023-05-25'}]]}})]};});
+function setRealgapCase(){document.getElementById('case-realgap').innerHTML='📌 <b>真實案例</b>　NVIDIA 2023/05/24 盤後財報優於預期，隔日 5/25 直接<b>跳空開高</b>：前一日收 $30.5 → 開 $38.5（<b>+26%</b>），形成向上「突破缺口」，揭開 2023–2024 AI 行情序幕。<div class="meta">突破缺口＋爆量，是行情啟動而非竭盡的訊號 —— 這類缺口短期通常不回補。</div>';}
+
+/* M3 均線（真實·互動·台美切換）*/
+reg('c-ma',function(){const c=C();const d=dsFor('ma');
+  const sp=+v('ma-short'),lp=+v('ma-long'),useEma=document.getElementById('ma-ema').checked;
+  document.getElementById('ma-short-v').textContent=sp;document.getElementById('ma-long-v').textContent=lp;
+  const fn=useEma?EMA:SMA;const mS=fn(d.close,sp),mL=fn(d.close,lp);const pts=[];
+  for(let i=1;i<d.close.length;i++){if([mS[i-1],mL[i-1],mS[i],mL[i]].some(x=>x==null))continue;
+    if(mS[i-1]<=mL[i-1]&&mS[i]>mL[i])pts.push({coord:[d.dates[i],mS[i]],value:'金',itemStyle:{color:c.up},label:{color:'#fff',fontSize:10,fontWeight:700}});
+    if(mS[i-1]>=mL[i-1]&&mS[i]<mL[i])pts.push({coord:[d.dates[i],mS[i]],value:'死',itemStyle:{color:c.down},label:{color:'#fff',fontSize:10,fontWeight:700}});}
+  const nm=useEma?'EMA':'MA';
+  return{backgroundColor:'transparent',grid:{left:52,right:18,top:28,bottom:46},tooltip:tip(),
+   legend:{data:[d.name,nm+sp,nm+lp],textStyle:{color:c.ink},top:0,right:10},
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[Object.assign(candleSeries(d.name,d.kdata,c),{markPoint:{symbol:'circle',symbolSize:18,data:pts}}),
+     line(nm+sp,mS,c.l1,2),line(nm+lp,mL,c.l2,2)]};});
+
+/* M4 MACD */
+reg('c-macd',function(){const c=C();const d=dsFor('macd');
+  const f=+v('macd-f'),s=+v('macd-s'),m=+v('macd-m');
+  document.getElementById('macd-f-v').textContent=f;document.getElementById('macd-s-v').textContent=s;document.getElementById('macd-m-v').textContent=m;
+  const {dif,dea,bar}=MACD(d.close,f,s,m);const bc=bar.map(x=>({value:x,itemStyle:{color:x>=0?c.up:c.down}}));
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:[d.name,'DIF','DEA'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:52,right:18,top:28,height:'50%'},{left:52,right:18,top:'68%',height:'20%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,scale:true,splitLine:{show:false}})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
+   series:[candleSeries(d.name,d.kdata,c),line('DIF',dif,c.l2,1.5),line('DEA',dea,c.l1,1.5),
+     {name:'MACD',type:'bar',xAxisIndex:1,yAxisIndex:1,data:bc}]};});
+
+/* M4 RSI */
+reg('c-rsi',function(){const c=C();const d=dsFor('rsi');const p=+v('rsi-p');document.getElementById('rsi-p-v').textContent=p;
+  const rsi=RSI(d.close,p);
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:[d.name],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:52,right:18,top:28,height:'52%'},{left:52,right:18,top:'72%',height:'20%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,min:0,max:100,interval:50,scale:false})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
+   series:[candleSeries(d.name,d.kdata,c),
+     Object.assign(line('RSI'+p,rsi,c.l3,2),{xAxisIndex:1,yAxisIndex:1,markLine:{symbol:'none',label:{color:c.axis,fontSize:10},data:[
+       {yAxis:70,lineStyle:{color:c.down,type:'dashed'}},{yAxis:30,lineStyle:{color:c.up,type:'dashed'}}]}})]};});
+
+/* M4 KD */
+reg('c-kd',function(){const c=C();const d=dsFor('kd');const p=+v('kd-p');document.getElementById('kd-p-v').textContent=p;
+  const {K,D}=KD(d.high,d.low,d.close,p);
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:[d.name,'K','D'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:52,right:18,top:28,height:'50%'},{left:52,right:18,top:'70%',height:'20%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,min:0,max:100,interval:50,scale:false})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
+   series:[candleSeries(d.name,d.kdata,c),
+     Object.assign(line('K',K,c.l2,1.8),{xAxisIndex:1,yAxisIndex:1,markLine:{symbol:'none',label:{color:c.axis,fontSize:10},data:[
+       {yAxis:80,lineStyle:{color:c.down,type:'dashed'}},{yAxis:20,lineStyle:{color:c.up,type:'dashed'}}]}}),
+     Object.assign(line('D',D,c.l1,1.8),{xAxisIndex:1,yAxisIndex:1})]};});
+
+/* M4 Williams %R（單例：2330）*/
+reg('c-wr',function(){const c=C();const d=dsWindow('2330','2025-01-01','2026-06-18');const p=+v('wr-p');document.getElementById('wr-p-v').textContent=p;
+  const wr=WR(d.high,d.low,d.close,p);
+  return{backgroundColor:'transparent',tooltip:tip(),grid:{left:48,right:18,top:16,bottom:40},
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c,{min:-100,max:0,interval:20,scale:false}),
+   dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,start:0,end:100}],
+   series:[Object.assign(line('%R',wr,c.l5,2),{markLine:{symbol:'none',label:{color:c.axis,fontSize:10},data:[
+     {yAxis:-20,lineStyle:{color:c.down,type:'dashed'}},{yAxis:-80,lineStyle:{color:c.up,type:'dashed'}}]}})]};});
+
+/* M5 布林 */
+reg('c-boll',function(){const c=C();const d=dsFor('boll');const p=+v('boll-p'),k=+v('boll-k')/10;
+  document.getElementById('boll-p-v').textContent=p;document.getElementById('boll-k-v').textContent=k.toFixed(1);
+  const {mid,up,low}=BOLL(d.close,p,k);
+  return{backgroundColor:'transparent',grid:{left:52,right:18,top:28,bottom:46},tooltip:tip(),
+   legend:{data:[d.name,'上軌','中軌','下軌'],textStyle:{color:c.ink},top:0,right:10},
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[candleSeries(d.name,d.kdata,c),
+     Object.assign(line('上軌',up,c.l2,1.5),{lineStyle:{width:1.5,color:c.l2,type:'dashed'}}),
+     line('中軌',mid,c.l1,1.8),
+     Object.assign(line('下軌',low,c.l2,1.5),{lineStyle:{width:1.5,color:c.l2,type:'dashed'}})]};});
+
+/* M5 BIAS（單例：NVDA）*/
+reg('c-bias',function(){const c=C();const d=dsWindow('NVDA','2024-06-01','2026-06-18');const p=+v('bias-p');document.getElementById('bias-p-v').textContent=p;
+  const b=BIAS(d.close,p);const cl=b.map(x=>x==null?null:({value:+x.toFixed(2),itemStyle:{color:x>=0?c.up:c.down}}));
+  return{backgroundColor:'transparent',grid:{left:48,right:18,top:16,bottom:40},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c,{scale:true}),
+   dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,start:0,end:100}],
+   series:[{name:'BIAS'+p,type:'bar',data:cl,markLine:{symbol:'none',data:[{yAxis:0,lineStyle:{color:c.axis}}]}}]};});
+
+/* M6 量價（NVDA 2023 財報爆量）*/
+reg('c-vol',function(){const c=C();const d=dsWindow('NVDA','2023-04-01','2023-08-31');
+  const vc=d.v.map((x,i)=>({value:x,itemStyle:{color:d.close[i]>=d.open[i]?c.up:c.down}}));
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:['NVDA','MA20'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:54,right:18,top:28,height:'54%'},{left:54,right:18,top:'74%',height:'18%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,splitLine:{show:false},axisLabel:{show:false}})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:0,end:100}],
+   series:[candleSeries('NVDA',d.kdata,c),line('MA20',SMA(d.close,20),c.l1,1.8),
+     {name:'量',type:'bar',xAxisIndex:1,yAxisIndex:1,data:vc}]};});
+function setVolCase(){document.getElementById('case-vol').innerHTML='📌 <b>真實案例</b>　NVIDIA 2023/05/25：財報跳空大漲那天，成交量較前期暴增數倍（巨量長紅）。<b>價漲量增</b>＝買盤真實湧入，是行情可持續的健康訊號；對照之後沿勢續攻可印證「量是因、價是果」。';}
+
+/* M6 OBV（2330 近兩年）*/
+reg('c-obv',function(){const c=C();const d=dsWindow('2330','2024-06-01','2026-06-18');const obv=OBV(d.close,d.v);
+  return{backgroundColor:'transparent',grid:{left:64,right:18,top:16,bottom:40},tooltip:tip(),
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,start:0,end:100}],
+   series:[Object.assign(line('OBV',obv,c.l4,2),{areaStyle:{color:'rgba(20,156,142,.08)'}})]};});
+
+/* M7 綜合（2330）*/
+reg('c-combo',function(){const c=C();const d=dsWindow('2330','2024-09-01','2026-06-18');
+  const ma5=SMA(d.close,5),ma20=SMA(d.close,20);const {up,low}=BOLL(d.close,20,2);
+  const {bar}=MACD(d.close,12,26,9);const {K,D}=KD(d.high,d.low,d.close,9);
+  const vc=d.v.map((x,i)=>({value:x,itemStyle:{color:d.close[i]>=d.open[i]?c.up:c.down}}));
+  const bc=bar.map(x=>({value:x,itemStyle:{color:x>=0?c.up:c.down}}));
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:['台積電','MA5','MA20','上軌','下軌'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:54,right:18,top:30,height:'38%'},{left:54,right:18,top:'52%',height:'11%'},{left:54,right:18,top:'67%',height:'12%'},{left:54,right:18,top:'83%',height:'12%'}],
+   xAxis:[dateAxis(c,{data:d.dates}),dateAxis(c,{gridIndex:1,data:d.dates,axisLabel:{show:false}}),dateAxis(c,{gridIndex:2,data:d.dates,axisLabel:{show:false}}),dateAxis(c,{gridIndex:3,data:d.dates,axisLabel:{show:false}})],
+   yAxis:[yAxis(c),yAxis(c,{gridIndex:1,splitLine:{show:false},axisLabel:{show:false},name:'量',nameTextStyle:{color:c.axis,fontSize:10}}),
+     yAxis(c,{gridIndex:2,splitLine:{show:false},axisLabel:{show:false},name:'MACD',nameTextStyle:{color:c.axis,fontSize:10}}),
+     yAxis(c,{gridIndex:3,min:0,max:100,interval:50,scale:false,name:'KD',nameTextStyle:{color:c.axis,fontSize:10}})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1,2,3]},{type:'slider',xAxisIndex:[0,1,2,3],height:16,bottom:4,start:35,end:100}],
+   series:[candleSeries('台積電',d.kdata,c),line('MA5',ma5,c.l1,1.5),line('MA20',ma20,c.l2,1.5),
+     Object.assign(line('上軌',up,c.l3,1),{lineStyle:{width:1,color:c.l3,type:'dashed'}}),
+     Object.assign(line('下軌',low,c.l3,1),{lineStyle:{width:1,color:c.l3,type:'dashed'}}),
+     {name:'量',type:'bar',xAxisIndex:1,yAxisIndex:1,data:vc},
+     {name:'MACD',type:'bar',xAxisIndex:2,yAxisIndex:2,data:bc},
+     Object.assign(line('K',K,c.l2,1.3),{xAxisIndex:3,yAxisIndex:3}),
+     Object.assign(line('D',D,c.l1,1.3),{xAxisIndex:3,yAxisIndex:3})]};});
+
+/* M7 籌碼面：三大法人買賣超 + 股價 */
+reg('c-inst',function(){const c=C();const ch=CASES.chips['2330'];const d=ch.dates;
+  return{backgroundColor:'transparent',tooltip:tip(),axisPointer:{link:[{xAxisIndex:'all'}]},
+   legend:{data:['收盤','外資','投信','自營'],textStyle:{color:c.ink},top:0,right:10},
+   grid:[{left:56,right:18,top:30,height:'46%'},{left:56,right:18,top:'64%',height:'26%'}],
+   xAxis:[dateAxis(c,{data:d}),dateAxis(c,{gridIndex:1,data:d,axisLabel:{show:false}})],
+   yAxis:[yAxis(c,{name:'收盤(元)',nameTextStyle:{color:c.axis,fontSize:10}}),
+     yAxis(c,{gridIndex:1,scale:true,splitLine:{show:false},name:'買賣超(張)',nameTextStyle:{color:c.axis,fontSize:10}})],
+   dataZoom:[{type:'inside',xAxisIndex:[0,1]},{type:'slider',xAxisIndex:[0,1],height:14,bottom:4,start:60,end:100}],
+   series:[line('收盤',ch.close,c.accent,2),
+     {name:'外資',type:'bar',stack:'inst',xAxisIndex:1,yAxisIndex:1,data:ch.foreign,itemStyle:{color:c.l2}},
+     {name:'投信',type:'bar',stack:'inst',xAxisIndex:1,yAxisIndex:1,data:ch.trust,itemStyle:{color:c.l1}},
+     {name:'自營',type:'bar',stack:'inst',xAxisIndex:1,yAxisIndex:1,data:ch.dealer,itemStyle:{color:c.l3}}]};});
+
+/* M7 融資融券餘額（雙 Y 軸）*/
+reg('c-margin',function(){const c=C();const ch=CASES.chips['2330'];
+  return{backgroundColor:'transparent',tooltip:tip(),
+   legend:{data:['融資餘額','融券餘額'],textStyle:{color:c.ink},top:0,right:10},
+   grid:{left:60,right:56,top:28,bottom:40},
+   xAxis:dateAxis(c,{data:ch.dates}),
+   yAxis:[yAxis(c,{scale:true,name:'融資(張)',nameTextStyle:{color:c.axis,fontSize:10}}),
+     yAxis(c,{scale:true,position:'right',splitLine:{show:false},name:'融券(張)',nameTextStyle:{color:c.axis,fontSize:10}})],
+   dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,start:0,end:100}],
+   series:[Object.assign(line('融資餘額',ch.marginBal,c.l1,2),{areaStyle:{color:'rgba(224,150,47,.08)'}}),
+     Object.assign(line('融券餘額',ch.shortBal,c.l5,1.6),{yAxisIndex:1})]};});
+
+/* M7 外資持股比率 */
+reg('c-foreign',function(){const c=C();const ch=CASES.chips['2330'];
+  return{backgroundColor:'transparent',tooltip:tip(),grid:{left:52,right:18,top:16,bottom:40},
+   xAxis:dateAxis(c,{data:ch.dates}),yAxis:yAxis(c,{scale:true,axisLabel:{color:c.axis,fontSize:11,formatter:'{value}%'}}),
+   dataZoom:[{type:'inside'},{type:'slider',height:14,bottom:4,start:0,end:100}],
+   series:[Object.assign(line('外資持股比率',ch.fratio,c.l4,2.2),{areaStyle:{color:'rgba(20,156,142,.08)'}})]};});
+
+function setChipCases(){const ch=CASES.chips['2330'];
+  const fcum=ch.foreign.reduce((x,y)=>x+(y||0),0);
+  const mb=ch.marginBal.filter(x=>x!=null),fr=ch.fratio.filter(x=>x!=null);
+  document.getElementById('case-inst').innerHTML='📌 <b>真實案例</b>　台積電 2024–2026：外資區間累計<b>'+(fcum<0?'淨賣超':'淨買超')+'約 '+Math.abs(fcum/10000).toFixed(1)+' 萬張</b>，但外資持股仍高達約 <b>'+fr[fr.length-1]+'%</b> —— 外資主導、籌碼安定，是權值股的典型結構。';
+  document.getElementById('case-margin').innerHTML='📌 <b>真實案例</b>　融資餘額自 <b>'+mb[0].toLocaleString()+' 張</b> 成長至 <b>'+mb[mb.length-1].toLocaleString()+' 張</b>（峰值約 '+Math.max(...mb).toLocaleString()+' 張），散戶槓桿明顯升高；融券長期偏低，反映權值股不易借券放空。';
+  document.getElementById('case-foreign').innerHTML='📌 <b>真實案例</b>　外資持股比率自 <b>'+fr[0]+'%</b> 變動至 <b>'+fr[fr.length-1]+'%</b>；對照同期股價大漲，外資雖獲利調節、持股仍維持高檔，國際資金並未撤離。';
+}
+
+/* ===== 6. 綁定 ===== */
+function v(id){return document.getElementById(id).value;}
+['ma-short','ma-long','ma-ema'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-ma']));
+['macd-f','macd-s','macd-m'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-macd']));
+document.getElementById('rsi-p').addEventListener('input',RD['c-rsi']);
+document.getElementById('kd-p').addEventListener('input',RD['c-kd']);
+document.getElementById('wr-p').addEventListener('input',RD['c-wr']);
+['boll-p','boll-k'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-boll']));
+document.getElementById('bias-p').addEventListener('input',RD['c-bias']);
+
+// 台/美市場切換
+document.querySelectorAll('.mkt-tabs').forEach(tabs=>{const card=tabs.dataset.card;
+  tabs.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{
+    MKT[card]=b.dataset.k;
+    tabs.querySelectorAll('button').forEach(x=>x.classList.toggle('on',x===b));
+    RD['c-'+card](); updateCase(card);}));});
+
+// 顏色模式
+document.querySelectorAll('#mkt-seg button').forEach(b=>b.addEventListener('click',()=>applyMode(b.dataset.mode)));
+document.getElementById('btn-print').addEventListener('click',()=>window.print());
+
+// 存圖 PNG
+document.querySelectorAll('[data-shot]').forEach(btn=>{btn.addEventListener('click',async()=>{
+  const target=document.getElementById(btn.dataset.shot);const orig=btn.textContent;btn.textContent='⏳';
+  await new Promise(r=>setTimeout(r,60));
+  const cv=await html2canvas(target,{scale:2,backgroundColor:getComputedStyle(document.documentElement).getPropertyValue('--card').trim()||'#FFFCF6',useCORS:true});
+  const a=document.createElement('a');a.download=btn.dataset.shot+'_'+MODE+'.png';a.href=cv.toDataURL('image/png');a.click();
+  btn.textContent=orig;});});
+
+// scrollspy
+const links=[...document.querySelectorAll('.toc a')];
+const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links.forEach(l=>l.classList.toggle('active',l.getAttribute('href')==='#'+e.target.id));});},{rootMargin:'-20% 0px -70% 0px'});
+[...document.querySelectorAll('main section')].forEach(s=>spy.observe(s));
+
+/* ===== 7. 啟動 ===== */
+drawAnatomy();
+setTrendCase(); setRealtopCase(); setRealgapCase(); setVolCase(); setChipCases();
+['ma','macd','rsi','kd','boll'].forEach(updateCase);
+applyMode('tw');
+</script>
+</body>
+</html>
