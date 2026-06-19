@@ -73,6 +73,14 @@ section{scroll-margin-top:70px; margin-bottom:42px}
 .casebox{background:linear-gradient(180deg,#FFF8EC,#FBEFD9); border:1px solid var(--border); border-left:4px solid var(--accent); border-radius:10px; padding:11px 15px; margin-top:12px; font-size:13.5px; color:var(--ink2)}
 .casebox b{color:var(--accent)}
 .casebox .meta{color:var(--muted); font-size:12px; margin-top:3px}
+/* 白話框（給完全不懂的人）*/
+.lab{display:inline-block; font-size:11.5px; font-weight:800; color:#fff; background:var(--l4); padding:2px 9px; border-radius:20px; margin-right:7px; vertical-align:middle; white-space:nowrap}
+.plain{background:#E8F4F1; border:1px solid #C9E6E0; border-left:4px solid var(--l4); border-radius:11px; padding:12px 16px; margin:0 0 14px; font-size:14.5px; line-height:1.8; color:#2c5650}
+.plain b{color:#0f7c6e}
+.primer{background:#FBF2DC; border:1px solid #EAD9B0; border-radius:14px; padding:18px 22px; margin-bottom:18px}
+.primer h3{margin:0 0 10px; color:#9a6a18; font-size:18px}
+.primer p{margin:7px 0; font-size:14.5px; color:#5b4a2a; line-height:1.8}
+.primer b{color:#9a6a18}
 /* 參數教學框 */
 .parambox{background:#F3F1EA; border:1px solid var(--border2); border-left:4px solid var(--l2); border-radius:11px; padding:13px 16px; margin:12px 0; font-size:13.5px; color:var(--ink2)}
 .parambox h4{margin:0 0 8px; font-size:14px; color:var(--l2); font-weight:800}
@@ -100,7 +108,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
   section{margin-bottom:8px}
   .modhead{break-after:avoid} h2,h3{break-after:avoid}
   .card{box-shadow:none; border-color:#ddd; padding:14px 16px; margin-bottom:14px; break-inside:avoid}
-  .chart,.formula,.kv,.casebox,.parambox,.signal-table,.banner,.grid2,.card>.ch{break-inside:avoid}
+  .chart,.formula,.kv,.casebox,.parambox,.plain,.primer,.signal-table,.banner,.grid2,.card>.ch{break-inside:avoid}
 }
 @media(max-width:880px){.wrap{grid-template-columns:1fr} .toc{display:none}}
 </style>
@@ -141,6 +149,14 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
       <div class="modhead"><span class="no">0</span><h2>K 線基礎與顏色習慣</h2></div>
       <p class="lede">K 線（Candlestick）是技術分析的最小單位，一根 K 線濃縮了一段時間內的「開、收、高、低」四個價格。本教材所有圖表皆採用<b>真實歷史資料</b>（台積電 2330、加權指數、NVIDIA、Apple），讓你對照課本理論與市場實況。</p>
 
+      <div class="primer">
+        <h3>🔰 完全沒碰過股票？先花 60 秒看這裡</h3>
+        <p><b>股票是什麼？</b>買一張股票，等於買下「一家公司的一小塊」。公司賺錢、被大家看好，這一小塊就更值錢。</p>
+        <p><b>股價為什麼會動？</b>就像菜市場喊價——<b>想買的人多就漲、想賣的人多就跌</b>，每分每秒都在變。</p>
+        <p><b>技術分析在做什麼？</b>它不研究公司本身，而是<b>看股價過去的走勢圖找規律</b>，有點像看天氣圖預測會不會下雨。下面教的「K 線、均線、各種指標」都是看圖的工具。</p>
+        <p><b>怎麼讀這份教材？</b>每個段落最前面都有一個 <span class="lab">🧒 白話</span> 框，先用生活比喻把它講懂。<b>看不懂後面的公式沒關係——白話框看懂就很夠用了。</b></p>
+      </div>
+
       <div class="banner">
         <h3>🎨 紅綠漲跌：台股 vs 國際剛好相反</h3>
         <p><b>台股 / 中港股</b>：上漲＝<span class="c-red">紅 K</span>、下跌＝<span class="c-green">綠 K</span>（紅喜綠憂的東方文化）。<br>
@@ -150,6 +166,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
 
       <div class="card">
         <div class="ch"><h3>一根 K 線的解剖</h3><button class="btn" data-shot="card-anatomy">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>一根 K 線就是把<b>「一天的股價故事」濃縮成一根蠟燭</b>：早上開盤多少、收盤多少（中間粗粗的「實體」），盤中最高、最低衝到哪（上下細細的「影線」）。顏色只是告訴你<b>今天收盤比開盤高（漲）還是低（跌）</b>。</div>
         <p class="sub">實體（Body）＝開盤與收盤之間；影線（Shadow / Wick）＝最高最低的延伸。</p>
         <div id="card-anatomy">
           <div id="svg-anatomy" style="display:flex;justify-content:center;padding:6px 0"></div>
@@ -177,6 +194,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
       <p class="lede">「順勢而為」是技術分析第一原則。支撐（Support）是跌不下去的價格帶，壓力（Resistance）是漲不上去的價格帶；趨勢線連接波段高低點。</p>
       <div class="card">
         <div class="ch"><h3>真實上升趨勢：台積電 2023–2024</h3><button class="btn" data-shot="card-trend">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>把股價想成<b>走樓梯</b>：一階比一階高＝<b>上升趨勢</b>（強）、一階比一階低＝<b>下降趨勢</b>（弱）、在平地來回走＝<b>盤整</b>。「支撐」像<b>地板</b>（跌到這裡常有人搶買、跌不太下去）；「壓力」像<b>天花板</b>（漲到這裡有人想賣、漲不太上去）。</div>
         <p class="sub">水平虛線＝此區間的真實最高（壓力）與最低（支撐）；斜線＝沿波段低點的上升趨勢（示意連線）。</p>
         <div id="card-trend"><div id="c-trend" class="chart tall"></div></div>
         <div class="casebox" id="case-trend"></div>
@@ -194,6 +212,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
 
       <div class="card">
         <div class="ch"><h3>頭肩頂 / M 頭<span class="tag rev">反轉示意</span></h3><button class="btn" data-shot="card-hs">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>「型態」就是股價在圖上<b>畫出來的形狀</b>，像看天上的雲猜會不會下雨。某些形狀（例如這個三座山峰、中間最高的「頭肩頂」）<b>常出現在股價要從漲轉跌的時候</b>，所以被當成警訊。提醒：真實股價畫得沒課本這麼漂亮。</div>
         <p class="sub">理想形：左肩、頭、右肩三高峰，頭最高；連兩谷＝頸線。<b>跌破頸線</b>確認反轉，目標跌幅≈頭到頸線高度。</p>
         <div id="card-hs"><div id="c-hs" class="chart"></div></div>
       </div>
@@ -238,6 +257,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
             <button class="btn" data-shot="card-ma">⬇ 存圖</button>
           </div>
         </div>
+        <div class="plain"><span class="lab">🧒 白話</span>均線就是<b>「最近 N 天的平均股價」</b>連成的線，像看你<b>最近幾次考試的平均分數</b>——平均往上＝最近在進步（股價走強）。當<b>短期平均（近況）往上超越長期平均（長期水準）</b>＝「最近明顯變好」＝<b>黃金交叉</b>（轉強）；反過來被超越＝死亡交叉（轉弱）。</div>
         <p class="sub">短均上穿長均＝<span class="up-c">黃金交叉（偏多）</span>；下穿＝<span class="down-c">死亡交叉（偏空）</span>。拖動滑桿改天數即時重算。</p>
         <div class="controls">
           <div class="grp"><label>短期 MA</label><input type="range" id="ma-short" min="3" max="60" value="20"><span class="val" id="ma-short-v">20</span><span class="hint">日</span></div>
@@ -268,6 +288,7 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
       <div class="card">
         <div class="ch"><div><h3>MACD<span class="tag">真實·互動</span></h3></div>
           <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="macd"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-macd">⬇ 存圖</button></div></div>
+        <div class="plain"><span class="lab">🧒 白話</span>MACD 在比<b>兩個跑者</b>：一個跑得快（短期），一個跑得慢（長期）。<b>快的拉開領先＝上漲動能變強</b>；快的被追上甚至反超＝動能轉弱。下面那排紅綠柱子就是「兩人差距」，<b>柱子由綠翻紅＝氣勢開始往上</b>。</div>
         <p class="sub">DIF（快線）＝EMA快−EMA慢；DEA（訊號線）＝DIF 的 EMA；柱狀體＝(DIF−DEA)×2。</p>
         <div class="formula">DIF = EMA(close,12) − EMA(close,26)
 DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
@@ -291,6 +312,7 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
       <div class="card">
         <div class="ch"><div><h3>RSI 相對強弱<span class="tag">真實·互動</span></h3></div>
           <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="rsi"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-rsi">⬇ 存圖</button></div></div>
+        <div class="plain"><span class="lab">🧒 白話</span>RSI 像一場<b>買方 vs 賣方的拔河比數</b>，從 0 到 100。<b>太高（70 以上）＝買方用力過猛、可能累了要休息</b>（超買）；<b>太低（30 以下）＝賣方殺過頭、可能要反彈</b>（超賣）；50 附近＝勢均力敵。</div>
         <p class="sub">把一段期間的漲幅占比換算成 0–100。70 以上超買、30 以下超賣。</p>
         <div class="formula">RSI = 100 − 100 / (1 + 平均漲幅 / 平均跌幅)</div>
         <div class="controls"><div class="grp"><label>週期</label><input type="range" id="rsi-p" min="5" max="30" value="14"><span class="val" id="rsi-p-v">14</span><span class="hint">日</span></div></div>
@@ -308,6 +330,7 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
       <div class="card">
         <div class="ch"><div><h3>KD 隨機指標<span class="tag">真實·互動</span></h3></div>
           <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="kd"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 Apple</button></div><button class="btn" data-shot="card-kd">⬇ 存圖</button></div></div>
+        <div class="plain"><span class="lab">🧒 白話</span>KD 在問：<b>今天收盤價，站在最近這段日子的高低區間裡的哪個位置？</b>像<b>考試在班上的排名百分比</b>——接近 100＝幾乎最高（很強，但小心過熱）；接近 0＝幾乎最低（很弱，但可能要反彈）。</div>
         <p class="sub">衡量收盤在近期高低區間的相對位置。K 快線、D 慢線，20 以下超賣、80 以上超買。台股最常用。</p>
         <div class="formula">RSV = (收盤 − N日最低) / (N日最高 − N日最低) × 100
 K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
@@ -324,6 +347,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>威廉指標 Williams %R<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-wr">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>威廉指標和上面的 KD 是<b>雙胞胎</b>，看的東西一樣（收盤在高低區間的位置），只是數字方向相反（用 0 到 −100）。它<b>反應更快</b>、適合搶短，但也更容易「看走眼」。</div>
         <p class="sub">與 KD 同源、方向相反，刻度 0 ~ −100。−20 以上超買、−80 以下超賣，反應靈敏適合短線。資料：台積電近一年半。</p>
         <div class="controls"><div class="grp"><label>週期</label><input type="range" id="wr-p" min="5" max="28" value="14"><span class="val" id="wr-p-v">14</span><span class="hint">日</span></div></div>
         <div class="parambox">
@@ -344,6 +368,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
       <div class="card">
         <div class="ch"><div><h3>布林通道 Bollinger Bands<span class="tag">真實·互動</span></h3></div>
           <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="boll"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-boll">⬇ 存圖</button></div></div>
+        <div class="plain"><span class="lab">🧒 白話</span>布林通道幫股價畫出一條<b>「正常活動範圍」</b>，像規定小孩在公園<b>大概在哪個範圍內跑</b>。中間是平均線，上下兩條是邊界：<b>碰到上邊界＝偏貴、碰到下邊界＝偏便宜</b>。通道<b>突然變窄</b>常是「暴風雨前的寧靜」，準備有大行情。</div>
         <p class="sub">中軌＝N 日均線；上下軌＝中軌 ± K 倍標準差。通道縮口（Squeeze）後常出現大行情。</p>
         <div class="formula">中軌 = SMA(close, N) ；  上/下軌 = 中軌 ± K × 標準差</div>
         <div class="controls">
@@ -367,6 +392,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>乖離率 BIAS<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-bias">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>乖離率就是<b>股價離平均線多遠</b>。想像股價和均線之間綁了一條<b>橡皮筋</b>：<b>拉得越開（乖離越大），越容易彈回來</b>。漲太多、遠離均線＝短線可能要回檔；跌太深＝可能要反彈。</div>
         <p class="sub">(收盤 − 均線) ÷ 均線 ×100%。正乖離過大＝短線漲多易回；負乖離過大＝跌深易反彈。資料：NVIDIA。</p>
         <div class="controls"><div class="grp"><label>均線週期</label><input type="range" id="bias-p" min="5" max="60" value="20"><span class="val" id="bias-p-v">20</span><span class="hint">日</span></div></div>
         <div class="parambox">
@@ -386,6 +412,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>真實量價：NVIDIA 2023 財報爆量</h3><button class="btn" data-shot="card-vol">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>成交量＝<b>當天有多少人在買賣這檔股票</b>，像看一場活動<b>來了多少人＝有多熱</b>。股價漲、<b>人潮也變多（量增）＝大家真的想買</b>，最健康；漲但沒人氣（量縮）就要懷疑這波漲是不是虛的。</div>
         <p class="sub">下方量柱顏色隨當日漲跌。觀察 2023/05 財報跳空那天的<b>巨量長紅</b>—— 教科書級的「價漲量增」啟動訊號。</p>
         <div id="card-vol"><div id="c-vol" class="chart tall"></div></div>
         <div class="casebox" id="case-vol"></div>
@@ -400,6 +427,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>OBV 能量潮（台積電近兩年）</h3><button class="btn" data-shot="card-obv">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>OBV 像幫股票<b>累計人氣分數</b>：上漲的日子加分、下跌的日子扣分。如果<b>股價還沒怎麼動、人氣分數卻偷偷往上爬</b>，常代表有人在默默買進，可能正在醞釀上漲。</div>
         <p class="sub">漲日加量、跌日減量，累積成線。OBV 與股價背離，透露主力進出的蛛絲馬跡。</p>
         <div class="formula">漲：OBV = 前OBV + 今量 ；  跌：OBV = 前OBV − 今量</div>
         <div id="card-obv"><div id="c-obv" class="chart"></div></div>
@@ -414,6 +442,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>三大法人買賣超 vs 股價</h3><button class="btn" data-shot="card-inst">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>「三大法人」是股市裡的<b>大戶</b>：外資（外國大基金）、投信（國內基金）、自營商（券商自己）。他們錢多、影響大，<b>就像班上幾個大哥在動，全班都會注意</b>。看他們<b>連續買進還是賣出</b>，比看單一散戶有意義得多。</div>
         <p class="sub">上方為收盤價，下方為每日<b>外資 / 投信 / 自營</b>買賣超（堆疊，單位：張＝1000 股）。零軸以上＝買超、以下＝賣超。觀察外資連續買/賣超與股價的對應。</p>
         <div id="card-inst"><div id="c-inst" class="chart tall"></div></div>
         <div class="legend-note">
@@ -430,6 +459,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>融資融券餘額（散戶槓桿溫度計）</h3><button class="btn" data-shot="card-margin">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>「融資」＝<b>跟券商借錢去買股票</b>（開槓桿，像借錢下注，賺賠都放大）。融資越多＝<b>散戶越敢追、越貪</b>；但借錢的人一旦套牢被迫賣出（斷頭）會加速下跌。「融券」則是<b>借股票來放空</b>（賭它會跌）。</div>
         <p class="sub">融資餘額＝散戶借錢做多的部位；融券餘額＝借券放空。單位：張。</p>
         <div id="card-margin"><div id="c-margin" class="chart"></div></div>
         <div class="casebox" id="case-margin"></div>
@@ -443,6 +473,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
 
       <div class="card">
         <div class="ch"><h3>外資持股比率趨勢</h3><button class="btn" data-shot="card-foreign">⬇ 存圖</button></div>
+        <div class="plain"><span class="lab">🧒 白話</span>這條線是<b>外國大戶總共持有這家公司多少比例</b>。比例<b>越爬越高＝外國資金越看好</b>、籌碼越穩；持續往下＝外資在撤。台積電長期約 70% 由外資持有，是不折不扣的「外資股」。</div>
         <p class="sub">外資持有佔已發行股數的比率（%）。長期趨升＝國際資金看好、籌碼安定；趨降＝資金撤離。</p>
         <div id="card-foreign"><div id="c-foreign" class="chart"></div></div>
         <div class="casebox" id="case-foreign"></div>
