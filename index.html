@@ -100,9 +100,10 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
 @media print{
   /* 強制印出背景色（破解 Chrome「背景圖形」預設關閉）*/
   *{ -webkit-print-color-adjust:exact !important; print-color-adjust:exact !important; }
-  @page{ margin:12mm; }
+  @page{ margin:0; }   /* 移除頁面白邊，讓暖米底色滿版到紙張邊緣 */
   .topbar,.toc,.btn,.controls,.mkt-tabs,.legend-note{display:none !important}
-  body{background:#fff}
+  html,body{background:var(--bg) !important}
+  body{padding:11mm 13mm}   /* 內距取代 @page margin，底色仍是暖米 */
   .wrap{display:block; max-width:none; padding:0; gap:0} main{min-width:0}
   /* 自然流動、不強制每節換頁；只避免「元素內部」被切斷 */
   section{margin-bottom:8px}
