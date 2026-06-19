@@ -81,6 +81,14 @@ section{scroll-margin-top:70px; margin-bottom:42px}
 .primer h3{margin:0 0 10px; color:#9a6a18; font-size:18px}
 .primer p{margin:7px 0; font-size:14.5px; color:#5b4a2a; line-height:1.8}
 .primer b{color:#9a6a18}
+/* K 線型態大全 tiles */
+.ptgrp{font-size:13.5px; font-weight:800; margin:12px 0 4px; color:var(--ink)}
+.ptgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(148px,1fr)); gap:10px; margin:4px 0 12px}
+.pttile{background:#FBF6EC; border:1px solid var(--border2); border-radius:10px; padding:9px 8px 8px; text-align:center}
+.pttile svg{display:block; margin:0 auto}
+.pttile .pn{font-size:13.5px; font-weight:800; color:var(--ink); margin-top:5px}
+.pttile .pd{font-size:11.5px; color:var(--ink2); line-height:1.5; margin-top:2px}
+.pttile .pr{font-size:11px; color:var(--accent); margin-top:3px; letter-spacing:1px}
 /* 參數教學框 */
 .parambox{background:#F3F1EA; border:1px solid var(--border2); border-left:4px solid var(--l2); border-radius:11px; padding:13px 16px; margin:12px 0; font-size:13.5px; color:var(--ink2)}
 .parambox h4{margin:0 0 8px; font-size:14px; color:var(--l2); font-weight:800}
@@ -185,6 +193,19 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
         <div class="legend-note">
           <span><span class="dot" style="background:var(--up)"></span>陽線（漲）</span>
           <span><span class="dot" style="background:var(--down)"></span>陰線（跌）</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>經典 K 線型態大全</h3><button class="btn" data-shot="card-kpatterns">⬇ 存圖</button></div>
+        <p class="sub">由 1～3 根 K 線組成的「市場心理快照」。<b>關鍵：同樣形狀在不同位置意義相反</b>——鎚子出現在跌勢末端＝止跌（偏多），同樣形狀出現在漲勢末端就叫「吊人」＝示警（偏空）。所以務必看它<b>出現在漲勢還是跌勢的末端</b>。★越多＝越可靠，但<b>任何單一型態都需後一根 K 線確認</b>，別單看一根就進場。</p>
+        <div id="card-kpatterns">
+          <h4 class="ptgrp">🟢 跌勢末端出現 → 底部反轉（偏多）</h4>
+          <div class="ptgrid" id="pt-bottom"></div>
+          <h4 class="ptgrp">🔴 漲勢末端出現 → 頂部反轉（偏空）</h4>
+          <div class="ptgrid" id="pt-top"></div>
+          <h4 class="ptgrp">⚖️ 多空猶豫（任一趨勢末端都要警覺轉折）</h4>
+          <div class="ptgrid" id="pt-neutral"></div>
         </div>
       </div>
     </section>
@@ -521,7 +542,7 @@ function applyMode(m){MODE=m;const t=THEME[m];
   document.documentElement.style.setProperty('--down',t.down);
   document.getElementById('mode-label').textContent=t.label;
   document.querySelectorAll('#mkt-seg button').forEach(b=>b.classList.toggle('on',b.dataset.mode===m));
-  renderAll(); drawAnatomy();}
+  renderAll(); drawAnatomy(); drawPatterns();}
 function C(){const cs=getComputedStyle(document.documentElement);return{
   up:THEME[MODE].up,down:THEME[MODE].down,
   grid:cs.getPropertyValue('--grid').trim(),axis:cs.getPropertyValue('--axis').trim(),
@@ -610,6 +631,38 @@ function drawAnatomy(){const t=THEME[MODE];document.getElementById('svg-anatomy'
  <text x="300" y="232" fill="${t.down}" font-weight="700" text-anchor="middle">陰線 收<開</text>
  <text x="246" y="120" fill="#968A7C" font-size="11" text-anchor="end" transform="rotate(-90 246 120)">實體 Body</text>
 </svg>`;}
+
+/* 經典 K 線型態大全：SVG 蠟燭產生器（隨模式翻色）+ 型態資料 */
+function candleSVG(cs,W,H){
+  const t=THEME[MODE],pad=9,n=cs.length;
+  const vs=cs.flatMap(k=>[k.h,k.l]),mx=Math.max(...vs),mn=Math.min(...vs),rng=(mx-mn)||1;
+  const y=v=>pad+(mx-v)/rng*(H-2*pad),slot=W/n,bw=Math.min(slot*0.46,20);
+  let s=`<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}">`;
+  cs.forEach((k,i)=>{const cx=slot*(i+0.5),col=k.c>=k.o?t.up:t.down;
+    const top=y(Math.max(k.o,k.c)),bh=Math.max(y(Math.min(k.o,k.c))-top,2);
+    s+=`<line x1="${cx}" y1="${y(k.h)}" x2="${cx}" y2="${y(k.l)}" stroke="${col}" stroke-width="2"/>`;
+    s+=`<rect x="${cx-bw/2}" y="${top}" width="${bw}" height="${bh}" rx="1.5" fill="${col}"/>`;});
+  return s+'</svg>';}
+const PATTERNS={
+  bottom:[
+    {name:'鎚子 Hammer',k:[{o:62,c:66,h:68,l:48}],d:'長下影＝殺低被買回，止跌訊號',r:3},
+    {name:'多頭吞噬',k:[{o:60,c:54,h:62,l:52},{o:53,c:65,h:67,l:51}],d:'大陽完全吞掉前一根陰線，多方反攻',r:4},
+    {name:'多頭孕線',k:[{o:66,c:54,h:68,l:52},{o:57,c:62,h:63,l:56}],d:'長黑後小陽縮在其內，跌勢趨緩',r:2},
+    {name:'晨星 Morning Star',k:[{o:68,c:57,h:70,l:55},{o:52,c:51,h:54,l:49},{o:55,c:67,h:69,l:54}],d:'黑→星→陽三部曲，黎明將至',r:4},
+    {name:'三白兵',k:[{o:48,c:55,h:57,l:46},{o:53,c:61,h:63,l:52},{o:59,c:67,h:69,l:58}],d:'連三紅步步高，多方強勢',r:3}],
+  top:[
+    {name:'吊人 Hanging Man',k:[{o:62,c:66,h:68,l:48}],d:'高檔長下影＝獲利了結警訊（形同鎚子，看位置）',r:2},
+    {name:'流星 Shooting Star',k:[{o:52,c:48,h:70,l:46}],d:'長上影＝衝高被壓回，漲勢受阻',r:3},
+    {name:'空頭吞噬',k:[{o:54,c:60,h:62,l:52},{o:62,c:51,h:64,l:50}],d:'大陰完全吞掉前一根陽線，空方反攻',r:4},
+    {name:'空頭孕線',k:[{o:54,c:66,h:68,l:52},{o:62,c:57,h:63,l:56}],d:'長紅後小黑縮在其內，漲勢趨緩',r:2},
+    {name:'夜星 Evening Star',k:[{o:52,c:63,h:65,l:50},{o:67,c:68,h:70,l:65},{o:65,c:53,h:67,l:51}],d:'紅→星→黑三部曲，黃昏已至',r:4},
+    {name:'三烏鴉',k:[{o:68,c:61,h:69,l:59},{o:63,c:55,h:64,l:53},{o:57,c:49,h:58,l:47}],d:'連三黑步步低，空方強勢',r:3}],
+  neutral:[
+    {name:'十字線 Doji',k:[{o:58,c:58,h:67,l:49}],d:'開盤≈收盤，多空拉鋸、轉折前兆',r:2},
+    {name:'紡錘線',k:[{o:57,c:59,h:67,l:49}],d:'小實體＋長上下影，方向不明、觀望',r:1}]};
+function drawPatterns(){
+  for(const g of ['bottom','top','neutral']){const el=document.getElementById('pt-'+g);if(!el)continue;
+    el.innerHTML=PATTERNS[g].map(p=>`<div class="pttile">${candleSVG(p.k,140,84)}<div class="pn">${p.name}</div><div class="pd">${p.d}</div><div class="pr">${'★'.repeat(p.r)}</div></div>`).join('');}}
 
 /* M0 真實 K 線：台積電近一年 */
 reg('c-candles',function(){const c=C();const d=dsWindow('2330','2025-06-19','2026-06-18');
@@ -902,7 +955,7 @@ const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links
 [...document.querySelectorAll('main section')].forEach(s=>spy.observe(s));
 
 /* ===== 7. 啟動 ===== */
-drawAnatomy();
+drawAnatomy(); drawPatterns();
 setTrendCase(); setRealtopCase(); setRealgapCase(); setVolCase(); setChipCases();
 ['ma','macd','rsi','kd','boll'].forEach(updateCase);
 applyMode('tw');
