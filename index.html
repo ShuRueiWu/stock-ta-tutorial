@@ -303,9 +303,9 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
         <div class="formula">DIF = EMA(close,12) − EMA(close,26)
 DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
         <div class="controls">
-          <div class="grp"><label>快線</label><input type="range" id="macd-f" min="5" max="20" value="12"><span class="val" id="macd-f-v">12</span></div>
-          <div class="grp"><label>慢線</label><input type="range" id="macd-s" min="20" max="40" value="26"><span class="val" id="macd-s-v">26</span></div>
-          <div class="grp"><label>訊號</label><input type="range" id="macd-m" min="3" max="15" value="9"><span class="val" id="macd-m-v">9</span></div>
+          <div class="grp"><label>快線</label><input type="range" id="macd-f" min="2" max="30" value="12"><span class="val" id="macd-f-v">12</span></div>
+          <div class="grp"><label>慢線</label><input type="range" id="macd-s" min="10" max="60" value="26"><span class="val" id="macd-s-v">26</span></div>
+          <div class="grp"><label>訊號</label><input type="range" id="macd-m" min="2" max="25" value="9"><span class="val" id="macd-m-v">9</span></div>
         </div>
         <div class="parambox">
           <h4>🎛️ 快線、慢線、訊號線——各管什麼？為什麼要調？</h4>
@@ -325,7 +325,7 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
         <div class="plain"><span class="lab">🧒 白話</span>RSI 像一場<b>買方 vs 賣方的拔河比數</b>，從 0 到 100。<b>太高（70 以上）＝買方用力過猛、可能累了要休息</b>（超買）；<b>太低（30 以下）＝賣方殺過頭、可能要反彈</b>（超賣）；50 附近＝勢均力敵。</div>
         <p class="sub">把一段期間的漲幅占比換算成 0–100。70 以上超買、30 以下超賣。</p>
         <div class="formula">RSI = 100 − 100 / (1 + 平均漲幅 / 平均跌幅)</div>
-        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="rsi-p" min="5" max="30" value="14"><span class="val" id="rsi-p-v">14</span><span class="hint">日</span></div></div>
+        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="rsi-p" min="2" max="50" value="14"><span class="val" id="rsi-p-v">14</span><span class="hint">日</span></div></div>
         <div class="parambox">
           <h4>🎛️ 週期調大調小差在哪？</h4>
           <div class="pp"><b>週期</b><span>計算「平均漲幅 ÷ 平均跌幅」時往回看幾天。14 是發明人 Wilder 的原始設定。</span></div>
@@ -344,7 +344,7 @@ DEA = EMA(DIF, 9) ；  MACD柱 = (DIF − DEA) × 2</div>
         <p class="sub">衡量收盤在近期高低區間的相對位置。K 快線、D 慢線，20 以下超賣、80 以上超買。台股最常用。</p>
         <div class="formula">RSV = (收盤 − N日最低) / (N日最高 − N日最低) × 100
 K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
-        <div class="controls"><div class="grp"><label>RSV 週期</label><input type="range" id="kd-p" min="5" max="21" value="9"><span class="val" id="kd-p-v">9</span><span class="hint">日</span></div></div>
+        <div class="controls"><div class="grp"><label>RSV 週期</label><input type="range" id="kd-p" min="2" max="40" value="9"><span class="val" id="kd-p-v">9</span><span class="hint">日</span></div></div>
         <div class="parambox">
           <h4>🎛️ RSV 週期在調什麼？</h4>
           <div class="pp"><b>週期</b><span>計算「收盤價落在近 N 日高低區間的哪個位置」時往回看幾天。台股慣用 9 日。</span></div>
@@ -359,7 +359,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <div class="ch"><h3>威廉指標 Williams %R<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-wr">⬇ 存圖</button></div>
         <div class="plain"><span class="lab">🧒 白話</span>威廉指標和上面的 KD 是<b>雙胞胎</b>，看的東西一樣（收盤在高低區間的位置），只是數字方向相反（用 0 到 −100）。它<b>反應更快</b>、適合搶短，但也更容易「看走眼」。</div>
         <p class="sub">與 KD 同源、方向相反，刻度 0 ~ −100。−20 以上超買、−80 以下超賣，反應靈敏適合短線。資料：台積電近一年半。</p>
-        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="wr-p" min="5" max="28" value="14"><span class="val" id="wr-p-v">14</span><span class="hint">日</span></div></div>
+        <div class="controls"><div class="grp"><label>週期</label><input type="range" id="wr-p" min="2" max="45" value="14"><span class="val" id="wr-p-v">14</span><span class="hint">日</span></div></div>
         <div class="parambox">
           <h4>🎛️ 週期與看法</h4>
           <div class="pp"><b>週期</b><span>與 KD 同源，往回看 N 日的高低區間。刻度是 0 ~ −100（注意是負值）。</span></div>
@@ -382,8 +382,8 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <p class="sub">中軌＝N 日均線；上下軌＝中軌 ± K 倍標準差。通道縮口（Squeeze）後常出現大行情。</p>
         <div class="formula">中軌 = SMA(close, N) ；  上/下軌 = 中軌 ± K × 標準差</div>
         <div class="controls">
-          <div class="grp"><label>週期 N</label><input type="range" id="boll-p" min="10" max="40" value="20"><span class="val" id="boll-p-v">20</span></div>
-          <div class="grp"><label>倍數 K</label><input type="range" id="boll-k" min="10" max="30" value="20"><span class="val" id="boll-k-v">2.0</span><span class="hint">σ</span></div>
+          <div class="grp"><label>週期 N</label><input type="range" id="boll-p" min="5" max="60" value="20"><span class="val" id="boll-p-v">20</span></div>
+          <div class="grp"><label>倍數 K</label><input type="range" id="boll-k" min="5" max="40" value="20"><span class="val" id="boll-k-v">2.0</span><span class="hint">σ</span></div>
         </div>
         <div class="parambox">
           <h4>🎛️ 週期 N 與倍數 K——通道的兩個旋鈕</h4>
@@ -404,7 +404,7 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <div class="ch"><h3>乖離率 BIAS<span class="tag">真實·互動</span></h3><button class="btn" data-shot="card-bias">⬇ 存圖</button></div>
         <div class="plain"><span class="lab">🧒 白話</span>乖離率就是<b>股價離平均線多遠</b>。想像股價和均線之間綁了一條<b>橡皮筋</b>：<b>拉得越開（乖離越大），越容易彈回來</b>。漲太多、遠離均線＝短線可能要回檔；跌太深＝可能要反彈。</div>
         <p class="sub">(收盤 − 均線) ÷ 均線 ×100%。正乖離過大＝短線漲多易回；負乖離過大＝跌深易反彈。資料：NVIDIA。</p>
-        <div class="controls"><div class="grp"><label>均線週期</label><input type="range" id="bias-p" min="5" max="60" value="20"><span class="val" id="bias-p-v">20</span><span class="hint">日</span></div></div>
+        <div class="controls"><div class="grp"><label>均線週期</label><input type="range" id="bias-p" min="2" max="120" value="20"><span class="val" id="bias-p-v">20</span><span class="hint">日</span></div></div>
         <div class="parambox">
           <h4>🎛️ 均線週期在調什麼？</h4>
           <div class="pp"><b>週期</b><span>乖離率＝價格偏離「這條均線」多少 %。週期決定你拿來比的是哪條均線。</span></div>
@@ -637,6 +637,8 @@ function synthOHLC(closes,seed){const rnd=(s=>()=>{s=(s*1103515245+12345)&0x7fff
    const hi=Math.max(op,cl)*(1+rnd()*0.01),lo=Math.min(op,cl)*(1-rnd()*0.01);kd.push([+op.toFixed(2),+cl.toFixed(2),+lo.toFixed(2),+hi.toFixed(2)]);}return kd;}
 function synthLabels(n){const a=[];for(let i=1;i<=n;i++)a.push('T'+i);return a;}
 function patternChart(id,closes,seed,marks){reg(id,function(){const c=C();const kd=synthOHLC(closes,seed);const d=synthLabels(closes.length);const ml=marks(d,closes,c);
+  if(ml.point&&ml.point.data) ml.point.data.forEach(p=>{const col=(p.itemStyle&&p.itemStyle.color)||c.accent;
+    p.label=Object.assign({color:'#fff',fontSize:11,fontWeight:800,backgroundColor:col,padding:[3,6],borderRadius:5},p.label||{});});
   return{backgroundColor:'transparent',grid:{left:46,right:18,top:16,bottom:24},tooltip:tip(),
    xAxis:{type:'category',data:d,axisLine:{lineStyle:{color:c.grid}},axisTick:{show:false},splitLine:{show:false},axisLabel:{show:false}},
    yAxis:yAxis(c),series:[Object.assign(candleSeries('K',kd,c),{markLine:ml.line,markPoint:ml.point})]};});}
@@ -671,17 +673,17 @@ reg('c-realtop',function(){const c=C();const d=dsWindow('TWII','2021-06-01','202
   return{backgroundColor:'transparent',grid:{left:58,right:18,top:16,bottom:46},tooltip:tip(),
    xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
    dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
-   series:[Object.assign(candleSeries('加權指數',d.kdata,c),{markPoint:{symbol:'pin',symbolSize:40,label:{color:'#fff',fontSize:10,fontWeight:700},data:[
-     {coord:['2022-01-05',18619.61],value:'頂 18619',itemStyle:{color:c.down}},
-     {coord:['2022-10-25',12629.48],value:'底 12629',itemStyle:{color:c.up}}]}})]};});
+   series:[Object.assign(candleSeries('加權指數',d.kdata,c),{markPoint:{symbol:'circle',symbolSize:8,data:[
+     {coord:['2022-01-05',18619.61],value:'頂 18,619',itemStyle:{color:c.down},label:{position:'top',distance:8,color:'#fff',fontSize:11,fontWeight:800,backgroundColor:c.down,padding:[3,7],borderRadius:5}},
+     {coord:['2022-10-25',12629.48],value:'底 12,629',itemStyle:{color:c.up},label:{position:'bottom',distance:8,color:'#fff',fontSize:11,fontWeight:800,backgroundColor:c.up,padding:[3,7],borderRadius:5}}]}})]};});
 function setRealtopCase(){document.getElementById('case-realtop').innerHTML='📌 <b>真實案例</b>　加權指數 2022 空頭：2022/01/05 見波段高 <b>18,619</b> 後頭部反轉，沿下降趨勢一路破底，至 2022/10/25 探低 <b>12,629</b>，波段重挫約 <b>−32%</b>。<div class="meta">對照課本頭肩頂：真實頂部往往是多次衝高失敗的「圓弧／複合頂」，少有教科書般工整。</div>';}
 
 /* M2 真實缺口：NVDA 2023 財報 */
 reg('c-realgap',function(){const c=C();const d=dsWindow('NVDA','2023-04-17','2023-07-14');
   return{backgroundColor:'transparent',grid:{left:48,right:18,top:16,bottom:26},tooltip:tip(),
    xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
-   series:[Object.assign(candleSeries('NVDA',d.kdata,c),{markPoint:{symbol:'pin',symbolSize:38,label:{color:'#fff',fontSize:10,fontWeight:700},data:[
-     {coord:['2023-05-25',39],value:'跳空+26%',itemStyle:{color:c.up}}]},
+   series:[Object.assign(candleSeries('NVDA',d.kdata,c),{markPoint:{symbol:'circle',symbolSize:8,data:[
+     {coord:['2023-05-25',39],value:'跳空 +26%',itemStyle:{color:c.up},label:{position:'top',distance:8,color:'#fff',fontSize:11,fontWeight:800,backgroundColor:c.up,padding:[3,7],borderRadius:5}}]},
      markLine:{symbol:'none',label:{show:false},data:[[{xAxis:'2023-05-24',lineStyle:{color:c.accent,type:'dashed'}},{xAxis:'2023-05-25'}]]}})]};});
 function setRealgapCase(){document.getElementById('case-realgap').innerHTML='📌 <b>真實案例</b>　NVIDIA 2023/05/24 盤後財報優於預期，隔日 5/25 直接<b>跳空開高</b>：前一日收 $30.5 → 開 $38.5（<b>+26%</b>），形成向上「突破缺口」，揭開 2023–2024 AI 行情序幕。<div class="meta">突破缺口＋爆量，是行情啟動而非竭盡的訊號 —— 這類缺口短期通常不回補。</div>';}
 
