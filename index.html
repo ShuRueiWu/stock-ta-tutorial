@@ -167,6 +167,8 @@ footer{max-width:1180px; margin:0 auto; padding:24px 20px 60px; color:var(--mute
     <div class="grp">實戰</div>
     <a href="#m8">8 · 多指標綜合看盤</a>
     <a href="#m9">9 · 實戰整合 SOP</a>
+    <div class="grp">進階</div>
+    <a href="#m10">10 · 神奇九轉 TD Sequential</a>
   </nav>
 
   <main>
@@ -641,6 +643,45 @@ K = ⅔·前K + ⅓·RSV ；  D = ⅔·前D + ⅓·K</div>
         <p class="sub" style="margin-top:8px">技術分析是<b>機率與紀律的遊戲</b>，不是水晶球。長期贏家靠的是「<b>嚴設停損＋讓利潤奔跑＋控制部位</b>」，而非每次都猜對。</p>
       </div>
     </section>
+
+    <!-- ===== M10 神奇九轉 ===== -->
+    <section id="m10">
+      <div class="modhead"><span class="no">10</span><h2>神奇九轉（TD Sequential）</h2></div>
+      <p class="lede">「神奇九轉」是美國分析師 Tom DeMark 的 <b>TD Sequential</b> 指標簡化版（華語看盤軟體常見名稱），屬於<b>逆勢、抓轉折</b>的工具。它不預測方向，而是數「同方向的力道連續了幾根」，數到 <b>9</b> 時提示「漲多或跌多、動能可能衰竭」。本章圖表為真實資料、規則即時計算，可切換台股 / 美股。</p>
+
+      <div class="card">
+        <div class="ch"><div><h3>九轉訊號<span class="tag rev">真實·互動</span></h3></div>
+          <div style="display:flex;gap:10px;align-items:center"><div class="mkt-tabs" data-card="td9"><button class="on" data-k="tw">🇹🇼 台積電</button><button data-k="us">🇺🇸 NVIDIA</button></div><button class="btn" data-shot="card-td9">⬇ 存圖</button></div></div>
+        <div class="plain"><span class="lab">🧒 白話</span>連續好幾天，<b>今天收盤都比「4 天前」還高</b>＝買盤一路追、漲勢沒停。當這件事<b>連發 9 天</b>，就像跑者連衝 9 段沒休息、<b>很可能累了要喘口氣</b>（賣出九轉，提示漲多）。反過來，收盤連 9 天都比 4 天前低＝<b>跌過頭、可能要反彈</b>（買進九轉）。</div>
+        <p class="sub">比「今日收盤」與「前第 4 根收盤」的方向，連續同向就計數，數到 9 為一個完整訊號（圖上以彩色「9」標出）。</p>
+        <div class="formula">賣出九轉：連續 9 根  收盤 &gt; 前第 4 根收盤  → 漲多警示（頂）
+買進九轉：連續 9 根  收盤 &lt; 前第 4 根收盤  → 跌多警示（底）
+任一根中斷條件，計數歸零重數</div>
+        <div class="controls">
+          <div class="grp"><label>回看根數</label><input type="range" id="td9-look" min="1" max="8" value="4"><span class="val" id="td9-look-v">4</span><span class="hint">根</span></div>
+          <div class="grp"><label>完成轉折數</label><input type="range" id="td9-n" min="5" max="13" value="9"><span class="val" id="td9-n-v">9</span><span class="hint">根</span></div>
+        </div>
+        <div class="parambox">
+          <h4>🎛️ 為什麼是「4」和「9」？調了會怎樣？</h4>
+          <div class="pp"><b>回看根數</b><span>每根 K 跟「前第幾根」比收盤（預設 4）。DeMark 取 4 是想跳過最短週期、過濾日與日之間的雜訊，比較「這幾天 vs 上一小段」的強弱。調小（1–2）＝對短期更敏感、訊號更多更雜；調大＝更遲鈍、訊號更少。</span></div>
+          <div class="pp"><b>完成轉折數</b><span>同方向要連幾根才算「過頭」（預設 9）。調小（如 5–6）＝更早、更頻繁喊轉折，但假訊號暴增；調大（如 13）＝更嚴格、訊號稀少但更可靠。完整版 TD Sequential 在 9 之後還要再走一段 Countdown 數到 <b>13</b> 才算高品質反轉。</span></div>
+          <div class="tradeoff">⚖️ 它是<b>逆勢指標</b>：<b>區間／轉折盤</b>準度較高；遇<b>單邊強趨勢會「鈍化」</b>——連續冒出好幾個 9 卻續漲／續跌，此時硬逆勢摸頂抄底最容易受傷（和 RSI、KD 在強勢股鈍化是同個毛病）。</div>
+          <div class="watch">👀 把「完成轉折數」從 9 調到 5：圖上瞬間冒出一堆「9」（其實是 5），大多無效，直觀體會「門檻太低＝雜訊」；調回 9 甚至 13，訊號變少但每個更值得看。九轉是<b>警示燈、不是進場鈕</b>，需配合 K 線型態、量能或支撐壓力再確認。</div>
+        </div>
+        <div id="card-td9"><div id="c-td9" class="chart tall"></div></div>
+        <div class="legend-note"><b>讀圖：</b>價格上方紅/綠「9」＝賣出九轉（漲多警示）；下方「9」＝買進九轉（跌多警示）；淡灰小數字＝逼近完成的計數過程。顏色依右上角台股／美股紅綠慣例切換。</div>
+        <div class="casebox" id="case-td9"></div>
+      </div>
+
+      <div class="card">
+        <div class="ch"><h3>怎麼用、別誤用</h3><button class="btn" data-shot="card-td9use">⬇ 存圖</button></div>
+        <div id="card-td9use"><div class="grid2">
+          <div class="kv"><h4>✅ 適合的用法</h4><ul><li><b>當警示</b>：數到 9＝提高警覺、準備找轉折，不是立刻反手</li><li><b>抓區間轉折</b>：盤整／箱型內，9 出現在區間上下緣較可靠</li><li><b>搭背離</b>：價創新高但九轉同時亮頂、且量縮＝較強的轉弱訊號</li><li><b>等二次確認</b>：9 之後配合 K 線（吞噬、長上影）或跌破短均線再動作</li></ul></div>
+          <div class="kv warn"><h4>⚠️ 常見誤用</h4><ul><li><b>把 9 當進場鈕</b>：強趨勢中 9 後常續走，逆勢直接進＝接刀</li><li><b>忽略鈍化</b>：連續多個 9 代表趨勢很強，反而不該逆做</li><li><b>單獨使用</b>：不配合型態／量能／趨勢，勝率有限</li><li><b>用錯週期</b>：日線較常用；分鐘線雜訊多、訊號品質下降</li></ul></div>
+        </div></div>
+        <p class="sub" style="margin-top:8px">定位：神奇九轉是<b>「動能衰竭的提示燈」</b>，長處在「提醒你別追了」，而非「叫你現在反手」。和趨勢指標（均線、DMI）<b>搭配共振</b>才有意義——趨勢指標確認大方向、九轉抓轉折時機。</p>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -700,6 +741,13 @@ function SAR(high,low,af0=0.02,step=0.02,afMax=0.2){const n=high.length,sar=Arra
       if(high[i]>s){trend=1;s=ep;ep=high[i];af=af0;}}
     sar[i]=s;}
   return sar;}
+// 神奇九轉 / TD Sequential Setup：比「收盤 vs 前第 look 根收盤」方向，連續同向計數，達 target 為完整訊號
+function TD9(close,look,target){const n=close.length,out=new Array(n).fill(null);let buy=0,sell=0;
+  for(let i=look;i<n;i++){
+    if(close[i]>close[i-look]){sell++;buy=0;out[i]={dir:1,n:sell};if(sell===target)sell=0;}
+    else if(close[i]<close[i-look]){buy++;sell=0;out[i]={dir:-1,n:buy};if(buy===target)buy=0;}
+    else{buy=0;sell=0;}}
+  return out;}
 
 /* ===== 3. 真實資料存取 ===== */
 const SR=window.CASES.series;
@@ -721,8 +769,9 @@ const WIN={
   rsi: {tw:['2330','2024-01-01','2026-06-18'], us:['NVDA','2024-01-01','2026-06-18']},
   kd:  {tw:['2330','2024-09-01','2026-06-18'], us:['AAPL','2024-09-01','2026-06-18']},
   boll:{tw:['2330','2023-06-01','2025-06-30'], us:['NVDA','2023-01-01','2025-03-31']},
+  td9: {tw:['2330','2025-08-01','2026-06-18'], us:['NVDA','2025-08-01','2026-06-18']},
 };
-const MKT={ma:'tw',macd:'tw',rsi:'tw',kd:'tw',boll:'tw'};
+const MKT={ma:'tw',macd:'tw',rsi:'tw',kd:'tw',boll:'tw',td9:'tw'};
 function dsFor(card){return dsWindow(...WIN[card][MKT[card]]);}
 
 // 真實案例敘述（數字皆經建置時對帳）
@@ -737,6 +786,8 @@ const NARR={
       us:'<b>Apple（近一年半）</b>：區間整理時 KD 在 20–80 來回擺盪，超買超賣訊號較可靠；趨勢盤則易鈍化。'},
   boll:{tw:'<b>台積電 2330</b>：通道縮口後常接大行情；突破上軌且開口擴張＝多方走強。',
         us:'<b>NVIDIA（2023–2025）</b>：AI 飆漲期股價長期「沿上軌漫步」，是布林在強勢趨勢中的經典型 —— 此時碰上軌不代表該賣。'},
+  td9:{tw:'<b>台積電 2330</b>：波段高/低點附近常見「9」亮起 —— 同方向連走 9 段、動能轉弱機率升高。但主升段中可能連續冒出多個賣出 9 卻續漲（鈍化），正好印證「九轉是<b>警示</b>、不是反手訊號」。',
+       us:'<b>NVIDIA</b>：2023–2024 AI 強勢段是九轉鈍化的活教材 —— 賣出 9 一再出現、股價照漲；真正有效的買進 9 多落在較大回檔的低點。逆勢訊號在強趨勢中要打折看。'},
 };
 function updateCase(card){const el=document.getElementById('case-'+card);if(el&&NARR[card])el.innerHTML='📌 <b>真實案例</b>　'+NARR[card][MKT[card]];}
 
@@ -1118,6 +1169,26 @@ reg('c-granville',function(){const c=C();
      {coord:[dts[18],116],value:'賣②跌破均線',itemStyle:{color:c.down},label:pill(c.down,'top')}]}}),
      line('MA6',ma,c.l1,2)]};});
 
+/* M10 神奇九轉 / TD Sequential（真實·互動·台美切換）*/
+reg('c-td9',function(){const c=C();const d=dsFor('td9');
+  const look=+v('td9-look'),tgt=+v('td9-n');
+  document.getElementById('td9-look-v').textContent=look;document.getElementById('td9-n-v').textContent=tgt;
+  const td=TD9(d.close,look,tgt);const mp=[];
+  for(let i=0;i<td.length;i++){const t=td[i];if(!t)continue;
+    const sell=t.dir>0,nine=t.n===tgt;
+    if(!nine&&t.n<Math.max(1,tgt-3))continue;        // 去雜訊：只畫每段「逼近完成」的尾段 + 完成的 9
+    const col=sell?c.down:c.up,y=sell?d.high[i]:d.low[i];
+    mp.push({coord:[d.dates[i],y],symbol:'circle',symbolSize:nine?7:2,
+      itemStyle:{color:nine?col:c.axis,opacity:nine?1:.5},
+      label:{show:true,position:sell?'top':'bottom',distance:nine?9:5,formatter:''+t.n,
+        fontSize:nine?12:10,fontWeight:nine?800:600,color:nine?'#fff':c.axis,
+        backgroundColor:nine?col:'transparent',padding:nine?[3,6]:[0,0],borderRadius:5}});}
+  return{backgroundColor:'transparent',grid:{left:52,right:18,top:34,bottom:46},tooltip:tip(),
+   legend:{data:[d.name],textStyle:{color:c.ink},top:0,right:10},
+   xAxis:dateAxis(c,{data:d.dates}),yAxis:yAxis(c),
+   dataZoom:[{type:'inside'},{type:'slider',height:16,bottom:6,start:0,end:100}],
+   series:[Object.assign(candleSeries(d.name,d.kdata,c),{markPoint:{data:mp}})]};});
+
 /* ===== 6. 綁定 ===== */
 function v(id){return document.getElementById(id).value;}
 document.getElementById('dmi-p').addEventListener('input',RD['c-dmi']);
@@ -1128,6 +1199,7 @@ document.getElementById('kd-p').addEventListener('input',RD['c-kd']);
 document.getElementById('wr-p').addEventListener('input',RD['c-wr']);
 ['boll-p','boll-k'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-boll']));
 document.getElementById('bias-p').addEventListener('input',RD['c-bias']);
+['td9-look','td9-n'].forEach(id=>document.getElementById(id).addEventListener('input',RD['c-td9']));
 
 // 台/美市場切換
 document.querySelectorAll('.mkt-tabs').forEach(tabs=>{const card=tabs.dataset.card;
@@ -1175,7 +1247,7 @@ const spy=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting)links
 /* ===== 7. 啟動 ===== */
 drawAnatomy(); drawPatterns(); drawDiverge();
 setTrendCase(); setRealtopCase(); setRealgapCase(); setVolCase(); setChipCases();
-['ma','macd','rsi','kd','boll'].forEach(updateCase);
+['ma','macd','rsi','kd','boll','td9'].forEach(updateCase);
 applyMode('tw');
 </script>
 </body>
